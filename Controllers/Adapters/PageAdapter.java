@@ -15,7 +15,6 @@ import fr.simston.mynews.Controllers.Fragments.TopStoriesFragment;
  */
 public class PageAdapter extends FragmentPagerAdapter {
 
-
     public PageAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -30,11 +29,11 @@ public class PageAdapter extends FragmentPagerAdapter {
         // Page to return
         switch (position){
             case 0:
-                return TopStoriesFragment.newInstance();
+                return new TopStoriesFragment();
             case 1:
-                return MostPopularFragment.newInstance();
+                return new MostPopularFragment();
             case 2:
-                return ArtsFragment.newInstance();
+                return new ArtsFragment();
                 default:return null;
         }
     }

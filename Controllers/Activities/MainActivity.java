@@ -21,13 +21,13 @@ public class MainActivity extends AppCompatActivity {
     private void configureViewPagerAndTabs(){
 
         // Get ViewPager from layout
-        ViewPager pager = (ViewPager)findViewById(R.id.activity_main_viewpager);
+        ViewPager pager = findViewById(R.id.activity_main_viewpager);
 
         // Set Adapter PageAdapter and glue it together
         pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
 
         // Get Tablayout from layout
-        TabLayout mTabLayout = (TabLayout) findViewById(R.id.activity_main_tabs);
+        TabLayout mTabLayout = findViewById(R.id.activity_main_tabs);
         // Glue TabLayout and ViewPager together
         mTabLayout.setupWithViewPager(pager);
         // Deign purpose. Tabs have the same width
