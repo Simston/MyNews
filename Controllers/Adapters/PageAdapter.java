@@ -27,27 +27,29 @@ public class PageAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // Page to return
-        switch (position){
+        switch (position) {
             case 0:
                 return new TopStoriesFragment();
             case 1:
                 return new MostPopularFragment();
             case 2:
                 return new ArtsFragment();
-                default:return null;
+            default:
+                return null;
         }
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 return "Top Stories";
             case 1:
                 return "Most Popular";
             case 2:
                 return "Arts";
-            default:return null;
+            default:
+                return null;
         }
     }
 }

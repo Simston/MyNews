@@ -34,36 +34,38 @@ public class MainActivity extends AppCompatActivity {
     // -----------------
     // TOOLBAR && MENU
     // -----------------
-    private void configureToolbar(){
+    private void configureToolbar() {
         mToolbar.setTitle("My News");
         // Set the Toolbar
         setSupportActionBar(mToolbar);
     }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu and add it to the Toolbar
         getMenuInflater().inflate(R.menu.menu_activity_main, menu);
         return true;
     }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle actions on menu items
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_action_search:
                 // do something
                 return true;
             case R.id.menu_main_params:
                 // do something
                 return true;
-                default:
-                    return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
     // --------------------------------------
     // ViewPager And TabLayout configuration
     //---------------------------------------
-    private void configureViewPagerAndTabs(){
+    private void configureViewPagerAndTabs() {
         // Set Adapter PageAdapter and glue it together
         pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
         // Glue TabLayout and ViewPager together

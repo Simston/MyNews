@@ -1,8 +1,9 @@
 package fr.simston.mynews.Controllers.Utils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import fr.simston.mynews.Controllers.Models.TopStoriesListArticles;
+import fr.simston.mynews.Controllers.Models.TopStoriesArticles;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -13,7 +14,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class NewYorkTimesStreams {
 
-    public static io.reactivex.Observable<TopStoriesListArticles> streamFetchArticlesTopStories(String section){
+    public static io.reactivex.Observable<List<TopStoriesArticles.Result>> streamFetchArticlesTopStories(String section){
         NewYorkTimesService newYorkTimesService = NewYorkTimesService.retrofit.create(NewYorkTimesService.class);
         return newYorkTimesService.getTopStoriesArticles(section, NewYorkTimesService.format, NewYorkTimesService.api)
                 .subscribeOn(Schedulers.io())
