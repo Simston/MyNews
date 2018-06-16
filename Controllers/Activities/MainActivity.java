@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // --------------------------------------
+    // ViewPager And TabLayout configuration
+    //---------------------------------------
     private void configureViewPagerAndTabs(){
         // Set Adapter PageAdapter and glue it together
         pager.setAdapter(new PageAdapter(getSupportFragmentManager()));

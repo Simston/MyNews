@@ -1,0 +1,25 @@
+package fr.simston.mynews.Controllers.Models;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+/**
+ * Created by St&eacute;phane Simon on 16/06/2018.
+ *
+ * @version 1.0
+ */
+public class TopStoriesListArticles {
+    @SerializedName("results")
+    @Expose
+    private List<TopStoriesArticles.Result> results = null;
+
+    public List<TopStoriesArticles.Result> getResults() {
+        return results;
+    }
+
+    public void setResults(List<TopStoriesArticles.Result> results) {
+        this.results = results;
+}
+}

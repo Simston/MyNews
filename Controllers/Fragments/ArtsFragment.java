@@ -20,4 +20,9 @@ public class ArtsFragment extends BaseFragment {
         return R.layout.arts_fragment;
     }
 
+    @Override
+    protected void callMethodOnCreateView() {
+
+    }
+
 }

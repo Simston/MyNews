@@ -18,4 +18,9 @@ public class MostPopularFragment extends BaseFragment {
     protected int getFragmentLayout() {
         return R.layout.most_popular_fragment;
     }
+
+    @Override
+    protected void callMethodOnCreateView() {
+
+    }
 }
