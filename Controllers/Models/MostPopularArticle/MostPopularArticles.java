@@ -1,4 +1,4 @@
-package fr.simston.mynews.Controllers.Models;
+package fr.simston.mynews.Controllers.Models.MostPopularArticle;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,29 +9,6 @@ import com.google.gson.annotations.SerializedName;
  * @version 1.0
  */
 public class MostPopularArticles {
-
-    public class DesFacet {
-
-
-    }
-
-    public class GeoFacet {
-
-
-    }
-
-
-    public class OrgFacet {
-
-
-    }
-
-    public class PerFacet {
-
-
-    }
-
-    public class Result {
 
         @SerializedName("url")
         @Expose
@@ -166,5 +143,4 @@ public class MostPopularArticles {
             this.geoFacet = geoFacet;
         }
 
-    }
 }

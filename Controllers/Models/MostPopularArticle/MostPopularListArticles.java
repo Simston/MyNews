@@ -1,4 +1,4 @@
-package fr.simston.mynews.Controllers.Models;
+package fr.simston.mynews.Controllers.Models.MostPopularArticle;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -23,7 +23,7 @@ public class MostPopularListArticles {
         private Integer numResults;
         @SerializedName("results")
         @Expose
-        private List<MostPopularArticles.Result> results = null;
+        private List<MostPopularArticles> results = null;
 
         public String getStatus() {
             return status;
@@ -49,11 +49,11 @@ public class MostPopularListArticles {
             this.numResults = numResults;
         }
 
-        public List<MostPopularArticles.Result> getResults() {
+        public List<MostPopularArticles> getResults() {
             return results;
         }
 
-        public void setResults(List<MostPopularArticles.Result> results) {
+        public void setResults(List<MostPopularArticles> results) {
             this.results = results;
         }
 }
