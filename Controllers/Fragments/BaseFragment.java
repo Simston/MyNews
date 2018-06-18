@@ -17,7 +17,6 @@ import butterknife.ButterKnife;
 public abstract class BaseFragment extends Fragment {
 
     // Force to implement those methods
-    protected abstract BaseFragment newInstance();
     protected abstract int getFragmentLayout();
     protected abstract void callMethodOnCreateView();
 

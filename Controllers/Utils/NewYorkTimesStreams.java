@@ -2,7 +2,7 @@ package fr.simston.mynews.Controllers.Utils;
 
 import java.util.concurrent.TimeUnit;
 
-import fr.simston.mynews.Controllers.Models.TopStoriesListArticles;
+import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesListArticles;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 

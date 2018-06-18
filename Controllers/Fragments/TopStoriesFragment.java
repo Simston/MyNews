@@ -2,13 +2,14 @@ package fr.simston.mynews.Controllers.Fragments;
 
 
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.TextView;
 
 import butterknife.BindView;
-import fr.simston.mynews.Controllers.Models.TopStoriesArticles;
-import fr.simston.mynews.Controllers.Models.TopStoriesListArticles;
+import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesListArticles;
 import fr.simston.mynews.Controllers.Utils.NewYorkTimesStreams;
+import fr.simston.mynews.Controllers.Views.TopStoriesAdapter;
 import fr.simston.mynews.R;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
@@ -19,10 +20,14 @@ import io.reactivex.observers.DisposableObserver;
 public class TopStoriesFragment extends BaseFragment {
 
     // FOR DESIGN
-    @BindView(R.id.textViewTopStories)
-    TextView mTextView;
+    @BindView(R.id.fragment_topstories_recycler_view)
+    RecyclerView mRecyclerView;
 
-    protected BaseFragment newInstance() {
+    // Declare list of TopStoriesArticles & Adapter
+
+    private TopStoriesAdapter mAdapter;
+
+    public static BaseFragment newInstance() {
         return new TopStoriesFragment();
     }
 
@@ -33,6 +38,7 @@ public class TopStoriesFragment extends BaseFragment {
 
     @Override
     protected void callMethodOnCreateView() {
+        configureRecyclerView();
     }
 
     @Override
@@ -41,18 +47,35 @@ public class TopStoriesFragment extends BaseFragment {
         this.disposeWhenDestroy();
     }
 
+    // -----------------
+    // CONFIGURATION
+    // -----------------
+    // Configure RecyclerView, Adapter, LayoutManager & glue it together
+
+    private void configureRecyclerView(){
+        // 3.2 - Create adapter passing the list of users
+        this.mAdapter = new TopStoriesAdapter();
+
+        // 3.3 - Attach the adapter to the recyclerview to populate items
+        this.mRecyclerView.setAdapter(this.mAdapter);
+
+        // 3.4 - Set layout manager to position the items
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
     // --------------
     // HTTP (RxJava)
     // --------------
 
     // Execute the stream subscribing to Observable defined inside NewYorkTimesStream
     private Disposable mDisposable = NewYorkTimesStreams.streamFetchArticlesTopStories("home").subscribeWith(
-            new DisposableObserver<TopStoriesListArticles>(){
+            new DisposableObserver<TopStoriesListArticles>() {
 
                 @Override
-                public void onNext(TopStoriesListArticles articlesTopStories) {
+                public void onNext(TopStoriesListArticles results) {
                     Log.e("TAG", "On next");
-                    updateUiWithTopStoriesArticles(articlesTopStories);
+                    updateUI(results);
+
                 }
 
                 @Override
@@ -66,15 +89,16 @@ public class TopStoriesFragment extends BaseFragment {
                 }
             });
 
-    private void disposeWhenDestroy(){
-        if(!this.mDisposable.isDisposed()) this.mDisposable.dispose();
+    private void disposeWhenDestroy() {
+        if (!this.mDisposable.isDisposed()) this.mDisposable.dispose();
     }
 
-    private void updateUiWithTopStoriesArticles(TopStoriesListArticles topStoriesListArticles){
-        StringBuilder stringBuilder = new StringBuilder();
-        for(TopStoriesArticles.Result topStorieArticle : topStoriesListArticles.getResults()){
-            stringBuilder.append("-").append(topStorieArticle.getTitle()).append("\n");
-        }
-        mTextView.setText(stringBuilder.toString());
+    // -------------------
+    // UPDATE UI
+    // -------------------
+
+
+    private void updateUI(TopStoriesListArticles topStoriesListArticles){
+        mAdapter.updateData(topStoriesListArticles.getResults());
     }
 }
