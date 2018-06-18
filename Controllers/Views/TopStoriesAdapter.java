@@ -6,9 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import fr.simston.mynews.Controllers.Models.TopStoriesArticles;
+import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesArticles;
 import fr.simston.mynews.R;
 
 /**
@@ -19,11 +20,11 @@ import fr.simston.mynews.R;
 public class TopStoriesAdapter extends RecyclerView.Adapter<TopStoriesViewHolder> {
 
     // FOR DATA
-    private List<TopStoriesArticles.Result> mTopStoriesListArticles;
+    private List<TopStoriesArticles> articles;
 
     // CONSTRUCTOR
-    public TopStoriesAdapter(List<TopStoriesArticles.Result> topStoriesListArticles) {
-        this.mTopStoriesListArticles = topStoriesListArticles;
+    public TopStoriesAdapter() {
+        this.articles = new ArrayList<>();
     }
 
     @Override
@@ -31,7 +32,7 @@ public class TopStoriesAdapter extends RecyclerView.Adapter<TopStoriesViewHolder
         // CREATE VIEW HOLDER AND INFLATING ITS XML LAYOUT
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.top_stories_fragment, parent, false);
+        View view = inflater.inflate(R.layout.top_stories_fragment_item, parent, false);
 
         return new TopStoriesViewHolder(view);
     }
@@ -39,11 +40,16 @@ public class TopStoriesAdapter extends RecyclerView.Adapter<TopStoriesViewHolder
     // UPDATE VIEW HOLDER WITH A GITHUBUSER
     @Override
     public void onBindViewHolder(TopStoriesViewHolder viewHolder, int position) {
-        viewHolder.updateWithGithubUser((TopStoriesArticles.Result) this.mTopStoriesListArticles.get(position));
+        viewHolder.updateWithArticle(this.articles.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mTopStoriesListArticles.size();
+        return articles.size();
+    }
+
+    public void updateData(List<TopStoriesArticles> list){
+        this.articles = list;
+        notifyDataSetChanged();
     }
 }

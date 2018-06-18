@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import fr.simston.mynews.Controllers.Adapters.PageAdapter;
+import fr.simston.mynews.Controllers.Views.PageAdapter;
 import fr.simston.mynews.R;
 
 public class MainActivity extends AppCompatActivity {

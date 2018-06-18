@@ -1,4 +1,4 @@
-package fr.simston.mynews.Controllers.Adapters;
+package fr.simston.mynews.Controllers.Views;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,7 +29,7 @@ public class PageAdapter extends FragmentPagerAdapter {
         // Page to return
         switch (position) {
             case 0:
-                return new TopStoriesFragment();
+                return TopStoriesFragment.newInstance();
             case 1:
                 return new MostPopularFragment();
             case 2:

@@ -1,8 +1,7 @@
 package fr.simston.mynews.Controllers.Utils;
 
-import java.util.List;
-
-import fr.simston.mynews.Controllers.Models.TopStoriesArticles;
+import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesListArticles;
+import io.reactivex.Observable;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -21,7 +20,7 @@ public interface NewYorkTimesService {
     String format = "json";
 
     @GET("{section}.{format}")
-    io.reactivex.Observable<List<TopStoriesArticles.Result>> getTopStoriesArticles(@Path("section") String section, @Path("format") String format, @Query("apikey") String apikey);
+    Observable<TopStoriesListArticles> getTopStoriesArticles(@Path("section") String section, @Path("format") String format, @Query("apikey") String apikey);
 
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("http://api.nytimes.com/svc/topstories/v2/")

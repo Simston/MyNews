@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import fr.simston.mynews.Controllers.Models.TopStoriesArticles;
+import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesArticles;
 import fr.simston.mynews.R;
 
 /**
@@ -16,14 +16,14 @@ import fr.simston.mynews.R;
  */
 public class TopStoriesViewHolder extends RecyclerView.ViewHolder{
 
-    @BindView(R.id.topstorie_item_title) TextView mTextViewTitle;
+    @BindView(R.id.topstorie_item_title) TextView mTextView;
 
     public TopStoriesViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void updateWithGithubUser(TopStoriesArticles.Result topStoriesArticle){
-        this.mTextViewTitle.setText(topStoriesArticle.getTitle());
+    public void updateWithArticle(TopStoriesArticles topStoriesArticle){
+        this.mTextView.setText(topStoriesArticle.getSection());
     }
 }

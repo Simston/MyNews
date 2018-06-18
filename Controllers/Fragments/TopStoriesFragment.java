@@ -6,12 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
-import fr.simston.mynews.Controllers.Models.TopStoriesArticles;
-import fr.simston.mynews.Controllers.Models.TopStoriesListArticles;
+import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesListArticles;
 import fr.simston.mynews.Controllers.Utils.NewYorkTimesStreams;
 import fr.simston.mynews.Controllers.Views.TopStoriesAdapter;
 import fr.simston.mynews.R;
@@ -28,10 +24,10 @@ public class TopStoriesFragment extends BaseFragment {
     RecyclerView mRecyclerView;
 
     // Declare list of TopStoriesArticles & Adapter
-    private List<TopStoriesArticles.Result> mResultsTopStories;
+
     private TopStoriesAdapter mAdapter;
 
-    protected BaseFragment newInstance() {
+    public static BaseFragment newInstance() {
         return new TopStoriesFragment();
     }
 
@@ -57,10 +53,8 @@ public class TopStoriesFragment extends BaseFragment {
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
 
     private void configureRecyclerView(){
-        // Reset List
-        this.mResultsTopStories = new ArrayList<>();
         // 3.2 - Create adapter passing the list of users
-        this.mAdapter = new TopStoriesAdapter(this.mResultsTopStories);
+        this.mAdapter = new TopStoriesAdapter();
 
         // 3.3 - Attach the adapter to the recyclerview to populate items
         this.mRecyclerView.setAdapter(this.mAdapter);
@@ -75,13 +69,13 @@ public class TopStoriesFragment extends BaseFragment {
 
     // Execute the stream subscribing to Observable defined inside NewYorkTimesStream
     private Disposable mDisposable = NewYorkTimesStreams.streamFetchArticlesTopStories("home").subscribeWith(
-            new DisposableObserver<List<TopStoriesArticles.Result>>() {
+            new DisposableObserver<TopStoriesListArticles>() {
 
                 @Override
-                public void onNext(List<TopStoriesArticles.Result> results) {
+                public void onNext(TopStoriesListArticles results) {
                     Log.e("TAG", "On next");
                     updateUI(results);
-                    //updateUiWithTopStoriesArticles(articlesTopStories);
+
                 }
 
                 @Override
@@ -99,26 +93,12 @@ public class TopStoriesFragment extends BaseFragment {
         if (!this.mDisposable.isDisposed()) this.mDisposable.dispose();
     }
 
-    private void updateUiWithTopStoriesArticles(TopStoriesListArticles topStoriesListArticles) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (TopStoriesArticles.Result topStorieArticle : topStoriesListArticles.getResults()) {
-            stringBuilder.append("-").append(topStorieArticle.getTitle()).append("\n");
-        }
-        //mTextView.setText(stringBuilder.toString());
-    }
-
     // -------------------
-
     // UPDATE UI
-
     // -------------------
 
 
-    private void updateUI(List<TopStoriesArticles.Result> topStoriesListArticles){
-
-        topStoriesListArticles.addAll(topStoriesListArticles);
-
-        mAdapter.notifyDataSetChanged();
-
+    private void updateUI(TopStoriesListArticles topStoriesListArticles){
+        mAdapter.updateData(topStoriesListArticles.getResults());
     }
 }

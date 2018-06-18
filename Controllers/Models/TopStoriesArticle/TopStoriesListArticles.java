@@ -1,4 +1,4 @@
-package fr.simston.mynews.Controllers.Models;
+package fr.simston.mynews.Controllers.Models.TopStoriesArticle;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -13,13 +13,13 @@ import java.util.List;
 public class TopStoriesListArticles {
     @SerializedName("results")
     @Expose
-    private List<TopStoriesArticles.Result> results = null;
+    private List<TopStoriesArticles> results = null;
 
-    public List<TopStoriesArticles.Result> getResults() {
+    public List<TopStoriesArticles> getResults() {
         return results;
     }
 
-    public void setResults(List<TopStoriesArticles.Result> results) {
+    public void setResults(List<TopStoriesArticles> results) {
         this.results = results;
 }
 }
