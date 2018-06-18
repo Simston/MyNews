@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
+
 import butterknife.BindView;
 import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesListArticles;
 import fr.simston.mynews.Controllers.Utils.NewYorkTimesStreams;
@@ -20,11 +22,12 @@ import io.reactivex.observers.DisposableObserver;
 public class TopStoriesFragment extends BaseFragment {
 
     // FOR DESIGN
-    @BindView(R.id.fragment_topstories_recycler_view)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.fragment_topstories_recycler_view) RecyclerView mRecyclerView;
 
-    // Declare list of TopStoriesArticles & Adapter
+    // FOR DATA
+    public Disposable mDisposable;
 
+    // Declare Adapter
     private TopStoriesAdapter mAdapter;
 
     public static BaseFragment newInstance() {
@@ -37,28 +40,23 @@ public class TopStoriesFragment extends BaseFragment {
     }
 
     @Override
-    protected void callMethodOnCreateView() {
-        configureRecyclerView();
-    }
+    protected Disposable getDisposable() {return this.mDisposable;}
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.disposeWhenDestroy();
+    protected void callMethodsOnCreateView() {
+        executeHttpRequest();
+        configureRecyclerView();
     }
 
     // -----------------
     // CONFIGURATION
     // -----------------
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
-
     private void configureRecyclerView(){
         // 3.2 - Create adapter passing the list of users
-        this.mAdapter = new TopStoriesAdapter();
-
+        this.mAdapter = new TopStoriesAdapter(Glide.with(this));
         // 3.3 - Attach the adapter to the recyclerview to populate items
         this.mRecyclerView.setAdapter(this.mAdapter);
-
         // 3.4 - Set layout manager to position the items
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -68,36 +66,31 @@ public class TopStoriesFragment extends BaseFragment {
     // --------------
 
     // Execute the stream subscribing to Observable defined inside NewYorkTimesStream
-    private Disposable mDisposable = NewYorkTimesStreams.streamFetchArticlesTopStories("home").subscribeWith(
-            new DisposableObserver<TopStoriesListArticles>() {
+    protected void executeHttpRequest(){
+        this.mDisposable = NewYorkTimesStreams.streamFetchArticlesTopStories("home").subscribeWith(
+                new DisposableObserver<TopStoriesListArticles>() {
 
-                @Override
-                public void onNext(TopStoriesListArticles results) {
-                    Log.e("TAG", "On next");
-                    updateUI(results);
+                    @Override
+                    public void onNext(TopStoriesListArticles results) {
+                        Log.e("TAG", "On next");
+                        updateUI(results);
+                    }
 
-                }
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("TAG", "On error" + Log.getStackTraceString(e));
+                    }
 
-                @Override
-                public void onError(Throwable e) {
-                    Log.e("TAG", "On error" + Log.getStackTraceString(e));
-                }
-
-                @Override
-                public void onComplete() {
-                    Log.e("TAG", "On complete !!");
-                }
-            });
-
-    private void disposeWhenDestroy() {
-        if (!this.mDisposable.isDisposed()) this.mDisposable.dispose();
+                    @Override
+                    public void onComplete() {
+                        Log.e("TAG", "On complete !!");
+                    }
+                });
     }
 
     // -------------------
     // UPDATE UI
     // -------------------
-
-
     private void updateUI(TopStoriesListArticles topStoriesListArticles){
         mAdapter.updateData(topStoriesListArticles.getResults());
     }

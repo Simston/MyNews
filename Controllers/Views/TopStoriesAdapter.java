@@ -1,10 +1,13 @@
 package fr.simston.mynews.Controllers.Views;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.bumptech.glide.RequestManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +24,17 @@ public class TopStoriesAdapter extends RecyclerView.Adapter<TopStoriesViewHolder
 
     // FOR DATA
     private List<TopStoriesArticles> articles;
+    private RequestManager glide;
 
     // CONSTRUCTOR
-    public TopStoriesAdapter() {
+    public TopStoriesAdapter(RequestManager glide) {
         this.articles = new ArrayList<>();
+        this.glide = glide;
     }
 
+    @NonNull
     @Override
-    public TopStoriesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TopStoriesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // CREATE VIEW HOLDER AND INFLATING ITS XML LAYOUT
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -39,8 +45,8 @@ public class TopStoriesAdapter extends RecyclerView.Adapter<TopStoriesViewHolder
 
     // UPDATE VIEW HOLDER WITH A GITHUBUSER
     @Override
-    public void onBindViewHolder(TopStoriesViewHolder viewHolder, int position) {
-        viewHolder.updateWithArticle(this.articles.get(position));
+    public void onBindViewHolder(@NonNull TopStoriesViewHolder viewHolder, int position) {
+        viewHolder.updateWithArticle(this.articles.get(position), this.glide);
     }
 
     @Override

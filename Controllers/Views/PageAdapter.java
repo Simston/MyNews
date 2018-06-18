@@ -31,9 +31,9 @@ public class PageAdapter extends FragmentPagerAdapter {
             case 0:
                 return TopStoriesFragment.newInstance();
             case 1:
-                return new MostPopularFragment();
+                return MostPopularFragment.newInstance();
             case 2:
-                return new ArtsFragment();
+                return ArtsFragment.newInstance();
             default:
                 return null;
         }
