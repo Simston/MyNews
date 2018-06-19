@@ -2,14 +2,30 @@ package fr.simston.mynews.Controllers.Fragments;
 
 
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
+import com.bumptech.glide.Glide;
+
+import butterknife.BindView;
+import fr.simston.mynews.Controllers.Models.MostPopularArticle.MostPopularListArticles;
+import fr.simston.mynews.Controllers.Utils.NewYorkTimesStreams;
+import fr.simston.mynews.Controllers.Views.MostPopularAdapter;
 import fr.simston.mynews.R;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MostPopularFragment extends BaseFragment {
+
+    // FOR DESIGN
+    @BindView(R.id.fragment_mostpopular_recycler_view) RecyclerView mRecyclerView;
+
+    // Declare Adapter
+    private MostPopularAdapter mAdapter;
 
     // FOR DATA
     public Disposable mDisposable;
@@ -25,7 +41,8 @@ public class MostPopularFragment extends BaseFragment {
 
     @Override
     protected void callMethodsOnCreateView() {
-
+        configureRecyclerView();
+        executeHttpRequest();
     }
 
     @Override
@@ -33,8 +50,45 @@ public class MostPopularFragment extends BaseFragment {
         return this.mDisposable;
     }
 
+    // -----------------
+    // CONFIGURATION
+    // -----------------
+    // Configure RecyclerView, Adapter, LayoutManager & glue it together
+    private void configureRecyclerView(){
+        // 3.2 - Create adapter passing the list of users
+        this.mAdapter = new MostPopularAdapter(Glide.with(this));
+        // 3.3 - Attach the adapter to the recyclerview to populate items
+        this.mRecyclerView.setAdapter(this.mAdapter);
+        // 3.4 - Set layout manager to position the items
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
     @Override
     protected void executeHttpRequest() {
+        this.mDisposable = NewYorkTimesStreams.streamFetchArticlesMostViewed().subscribeWith(
+                new DisposableObserver<MostPopularListArticles>() {
 
+                    @Override
+                    public void onNext(MostPopularListArticles results) {
+                        Log.e("TAG", "On next");
+                        updateUI(results);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("TAG", "On error" + Log.getStackTraceString(e));
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.e("TAG", "On complete !!");
+                    }
+                });
+    }
+    // -------------------
+    // UPDATE UI
+    // -------------------
+    private void updateUI(MostPopularListArticles mostPopularListArticles){
+        this.mAdapter.updateData(mostPopularListArticles.getResults());
     }
 }

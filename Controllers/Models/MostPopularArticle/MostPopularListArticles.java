@@ -12,48 +12,70 @@ import java.util.List;
  */
 public class MostPopularListArticles {
 
-        @SerializedName("status")
-        @Expose
-        private String status;
-        @SerializedName("copyright")
-        @Expose
-        private String copyright;
-        @SerializedName("num_results")
-        @Expose
-        private Integer numResults;
-        @SerializedName("results")
-        @Expose
-        private List<MostPopularArticles> results = null;
+    @SerializedName("status")
+    @Expose
+    private String status;
+    @SerializedName("copyright")
+    @Expose
+    private String copyright;
+    @SerializedName("num_results")
+    @Expose
+    private Integer numResults;
+    @SerializedName("results")
+    @Expose
+    private List<MostPopularArticles> results = null;
 
-        public String getStatus() {
-            return status;
-        }
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public MostPopularListArticles() {
+    }
 
-        public void setStatus(String status) {
-            this.status = status;
-        }
+    /**
+     *
+     * @param results
+     * @param status
+     * @param numResults
+     * @param copyright
+     */
+    public MostPopularListArticles(String status, String copyright, Integer numResults, List<MostPopularArticles> results) {
+        super();
+        this.status = status;
+        this.copyright = copyright;
+        this.numResults = numResults;
+        this.results = results;
+    }
 
-        public String getCopyright() {
-            return copyright;
-        }
+    public String getStatus() {
+        return status;
+    }
 
-        public void setCopyright(String copyright) {
-            this.copyright = copyright;
-        }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-        public Integer getNumResults() {
-            return numResults;
-        }
+    public String getCopyright() {
+        return copyright;
+    }
 
-        public void setNumResults(Integer numResults) {
-            this.numResults = numResults;
-        }
+    public void setCopyright(String copyright) {
+        this.copyright = copyright;
+    }
 
-        public List<MostPopularArticles> getResults() {
-            return results;
-        }
+    public Integer getNumResults() {
+        return numResults;
+    }
 
-        public void setResults(List<MostPopularArticles> results) {
-            this.results = results;
-        }
+    public void setNumResults(Integer numResults) {
+        this.numResults = numResults;
+    }
+
+    public List<MostPopularArticles> getResults() {
+        return results;
+    }
+
+    public void setResults(List<MostPopularArticles> results) {
+        this.results = results;
+    }
 }

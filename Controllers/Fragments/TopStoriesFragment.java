@@ -64,7 +64,6 @@ public class TopStoriesFragment extends BaseFragment {
     // --------------
     // HTTP (RxJava)
     // --------------
-
     // Execute the stream subscribing to Observable defined inside NewYorkTimesStream
     protected void executeHttpRequest(){
         this.mDisposable = NewYorkTimesStreams.streamFetchArticlesTopStories("home").subscribeWith(

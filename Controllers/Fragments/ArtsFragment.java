@@ -26,7 +26,7 @@ public class ArtsFragment extends BaseFragment {
 
     @Override
     protected void callMethodsOnCreateView() {
-
+        executeHttpRequest();
     }
 
     @Override

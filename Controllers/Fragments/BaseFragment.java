@@ -24,6 +24,7 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void executeHttpRequest();
 
 
+    private Disposable mDisposable;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public abstract class BaseFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         callMethodsOnCreateView();
+        this.mDisposable = getDisposable();
         // Configure design( Developer will call this method instead of override onCreateView())
         //this.configureDesign();
         return view;
@@ -47,10 +49,11 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        this.disposeWhenDestroy();
+        if(this.mDisposable != null) this.disposeWhenDestroy();
     }
     private void disposeWhenDestroy() {
-        if (!getDisposable().isDisposed()) this.getDisposable().dispose();
+        if (!this.mDisposable.isDisposed()) this.mDisposable.dispose();
     }
+
 
 }
