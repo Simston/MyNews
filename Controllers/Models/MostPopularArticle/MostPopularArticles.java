@@ -11,6 +11,7 @@ import java.util.List;
  * @version 1.0
  */
 public class MostPopularArticles {
+
     @SerializedName("url")
     @Expose
     private String url;

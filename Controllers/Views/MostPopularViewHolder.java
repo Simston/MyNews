@@ -8,12 +8,9 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.simston.mynews.Controllers.Models.MostPopularArticle.MostPopularArticles;
-import fr.simston.mynews.Controllers.Models.TopStoriesArticle.Multimedium;
 import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesArticles;
 import fr.simston.mynews.R;
 
@@ -42,10 +39,8 @@ public class MostPopularViewHolder extends RecyclerView.ViewHolder {
         this.section.setText(mostPopularArticles.getSection());
 
         // Update ImageView with Thumbnail
-        glide.load(mostPopularArticles.getMedia().get(0).getMediaMetadata().get(0).getUrl()).apply(RequestOptions.centerInsideTransform()).into(this.mImageView);
+        glide.load(mostPopularArticles.getMedia().get(0).getMediaMetadata().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
 
-
-        //updateImageView(multimediumList, glide);
 
     }
 
@@ -57,12 +52,5 @@ public class MostPopularViewHolder extends RecyclerView.ViewHolder {
             subsection = "";
         }
         return subsection;
-    }
-
-    private void updateImageView(List<Multimedium> multimediumList, RequestManager glide) {
-        if (multimediumList != null && !multimediumList.isEmpty()) {
-            glide.load(multimediumList.get(0).getUrl()).apply(RequestOptions.centerInsideTransform()).into(this.mImageView);
-        }
-
     }
 }

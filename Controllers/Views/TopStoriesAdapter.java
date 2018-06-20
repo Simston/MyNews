@@ -58,4 +58,8 @@ public class TopStoriesAdapter extends RecyclerView.Adapter<TopStoriesViewHolder
         this.articles = list;
         notifyDataSetChanged();
     }
+
+    public String getUrlArticle(int position){
+        return this.articles.get(position).getUrl();
+    }
 }

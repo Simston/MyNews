@@ -29,6 +29,8 @@ public class TopStoriesViewHolder extends RecyclerView.ViewHolder {
     TextView section;
     @BindView(R.id.fragment_item_image)
     ImageView mImageView;
+    @BindView(R.id.fragment_item_topstories_published_date)
+    TextView publishedDate;
 
     public TopStoriesViewHolder(View itemView) {
         super(itemView);
@@ -38,13 +40,14 @@ public class TopStoriesViewHolder extends RecyclerView.ViewHolder {
     public void updateWithArticle(TopStoriesArticles topStoriesArticle, RequestManager glide) {
         // Title of Article
         this.title.setText(topStoriesArticle.getTitle());
+        // Section an Subsection of Article
         this.section.setText(String.format("%s%s", topStoriesArticle.getSection(), ifSubsectionExist(topStoriesArticle)));
-
+        // Date format of Article
+        this.publishedDate.setText(formatStringDate(topStoriesArticle.getPublishedDate()));
         // Update ImageView with Thumbnail
         List<Multimedium> multimediumList;
         multimediumList = topStoriesArticle.getMultimedia();
         updateImageView(multimediumList, glide);
-
     }
 
     private String ifSubsectionExist(TopStoriesArticles topStoriesArticles) {
@@ -61,7 +64,31 @@ public class TopStoriesViewHolder extends RecyclerView.ViewHolder {
         if (multimediumList != null && !multimediumList.isEmpty()) {
             glide.load(multimediumList.get(0).getUrl()).apply(RequestOptions.centerInsideTransform()).into(this.mImageView);
         }
-
     }
 
+    private String formatStringDate(String dateString) {
+
+        String day = null;
+        String month = null;
+        String year = null;
+
+        int a = dateString.length();
+        char[] tabDay = new char[a];
+        char[] tabMonth = new char[a];
+        char[] tabYear = new char[a];
+
+        for(int i = 8; i < 10;i++){
+            tabDay[i] = dateString.charAt(i);
+            day = String.valueOf(tabDay);
+        }
+        for(int i = 5; i < 7;i++){
+            tabMonth[i] = dateString.charAt(i);
+            month = String.valueOf(tabMonth);
+        }
+        for(int i = 2; i < 4;i++){
+            tabYear[i] = dateString.charAt(i);
+            year = String.valueOf(tabYear);
+        }
+        return  day + "/" + month + "/"+ year;
+    }
 }
