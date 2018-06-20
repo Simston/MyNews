@@ -1,15 +1,19 @@
 package fr.simston.mynews.Controllers.Fragments;
 
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
+import fr.simston.mynews.Controllers.Activities.WebViewActivity;
 import fr.simston.mynews.Controllers.Models.MostPopularArticle.MostPopularListArticles;
+import fr.simston.mynews.Controllers.Utils.ItemClickSupport;
 import fr.simston.mynews.Controllers.Utils.NewYorkTimesStreams;
 import fr.simston.mynews.Controllers.Views.MostPopularAdapter;
 import fr.simston.mynews.R;
@@ -43,6 +47,7 @@ public class MostPopularFragment extends BaseFragment {
     protected void callMethodsOnCreateView() {
         configureRecyclerView();
         executeHttpRequest();
+        configureOnClickRecyclerView();
     }
 
     @Override
@@ -90,5 +95,23 @@ public class MostPopularFragment extends BaseFragment {
     // -------------------
     private void updateUI(MostPopularListArticles mostPopularListArticles){
         this.mAdapter.updateData(mostPopularListArticles.getResults());
+    }
+
+    // -----------------
+    // ACTION
+    // -----------------
+    // 1 - Configure item click on RecyclerView
+    private void configureOnClickRecyclerView(){
+
+        ItemClickSupport.addTo(mRecyclerView, R.layout.top_stories_fragment_item)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+
+                        Intent i = new Intent(getContext(), WebViewActivity.class);
+                        i.putExtra("url", mAdapter.getUrlArticle(position) );
+                        startActivity(i);
+                    }
+                });
     }
 }

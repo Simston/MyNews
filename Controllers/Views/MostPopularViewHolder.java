@@ -11,7 +11,6 @@ import com.bumptech.glide.request.RequestOptions;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.simston.mynews.Controllers.Models.MostPopularArticle.MostPopularArticles;
-import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesArticles;
 import fr.simston.mynews.R;
 
 /**
@@ -27,6 +26,7 @@ public class MostPopularViewHolder extends RecyclerView.ViewHolder {
     TextView section;
     @BindView(R.id.fragment_mostpopular_item_image)
     ImageView mImageView;
+    @BindView(R.id.fragment_item_mostpopular_published_date) TextView publishedDate;
 
     public MostPopularViewHolder(View itemView) {
         super(itemView);
@@ -37,6 +37,7 @@ public class MostPopularViewHolder extends RecyclerView.ViewHolder {
         // Title of Article
         this.title.setText(mostPopularArticles.getTitle());
         this.section.setText(mostPopularArticles.getSection());
+        this.publishedDate.setText(formatStringDate(mostPopularArticles.getPublishedDate()));
 
         // Update ImageView with Thumbnail
         glide.load(mostPopularArticles.getMedia().get(0).getMediaMetadata().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
@@ -44,13 +45,29 @@ public class MostPopularViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    private String ifSubsectionExist(TopStoriesArticles topStoriesArticles) {
-        String subsection;
-        if (!topStoriesArticles.getSubsection().equals("")) {
-            subsection = " > " + topStoriesArticles.getSubsection();
-        } else {
-            subsection = "";
+    private String formatStringDate(String dateString) {
+
+        String day = null;
+        String month = null;
+        String year = null;
+
+        int a = dateString.length();
+        char[] tabDay = new char[a];
+        char[] tabMonth = new char[a];
+        char[] tabYear = new char[a];
+
+        for(int i = 8; i < 10;i++){
+            tabDay[i] = dateString.charAt(i);
+            day = String.valueOf(tabDay);
         }
-        return subsection;
+        for(int i = 5; i < 7;i++){
+            tabMonth[i] = dateString.charAt(i);
+            month = String.valueOf(tabMonth);
+        }
+        for(int i = 2; i < 4;i++){
+            tabYear[i] = dateString.charAt(i);
+            year = String.valueOf(tabYear);
+        }
+        return  day + "/" + month + "/"+ year;
     }
 }

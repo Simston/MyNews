@@ -57,4 +57,8 @@ public class MostPopularAdapter extends RecyclerView.Adapter<MostPopularViewHold
         this.articles = list;
         notifyDataSetChanged();
     }
+
+    public String getUrlArticle(int position){
+        return this.articles.get(position).getUrl();
+    }
 }
