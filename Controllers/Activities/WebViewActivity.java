@@ -1,5 +1,6 @@
 package fr.simston.mynews.Controllers.Activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +34,7 @@ public class WebViewActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
-        String url = getIntent().getExtras().getString("url");
+        String url = Objects.requireNonNull(getIntent().getExtras()).getString("url");
         MyWebViewClient myWebViewClient = new MyWebViewClient();
         myWebViewClient.shouldOverrideUrlLoading(mWebView, url);
 
@@ -55,6 +58,7 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     private class MyWebViewClient extends WebViewClient {
+        @SuppressLint("SetJavaScriptEnabled")
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);

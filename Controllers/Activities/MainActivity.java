@@ -1,5 +1,6 @@
 package fr.simston.mynews.Controllers.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -52,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
         // Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.menu_action_search:
-                // do something
+                Intent i = new Intent(MainActivity.this, SearchActivity.class);
+                this.startActivity(i);
                 return true;
             case R.id.menu_main_params:
                 // do something
