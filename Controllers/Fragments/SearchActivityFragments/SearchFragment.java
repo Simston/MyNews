@@ -2,11 +2,12 @@ package fr.simston.mynews.Controllers.Fragments.SearchActivityFragments;
 
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import fr.simston.mynews.Controllers.Fragments.BaseFragment;
@@ -62,19 +63,19 @@ public class SearchFragment extends BaseFragment{
     // ACTION
     // -------
     private void etDatePickerConfig() {
-        et_begin_date.setOnClickListener(new View.OnClickListener() {
+        this.et_begin_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DateDialog dialog = new DateDialog(v);
-                FragmentTransaction ftz = getFragmentManager().beginTransaction();
+                android.app.FragmentTransaction ftz = Objects.requireNonNull(getActivity()).getFragmentManager().beginTransaction();
                 dialog.show(ftz, "DatePicker");
             }
         });
-        et_end_date.setOnClickListener(new View.OnClickListener() {
+        this.et_end_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DateDialog dialog = new DateDialog(v);
-                FragmentTransaction ftz = getFragmentManager().beginTransaction();
+                android.app.FragmentTransaction ftz = Objects.requireNonNull(getActivity()).getFragmentManager().beginTransaction();
                 dialog.show(ftz, "DatePicker");
             }
         });

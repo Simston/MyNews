@@ -45,10 +45,9 @@ public class SearchActivity extends AppCompatActivity {
         if (mSearchFragment == null) {
             // B - Create new fragment
             mSearchFragment = new SearchFragment();
-
             // C - Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_search_fragment, mSearchFragment)
+                    .add(R.id.fragment_search_fragment, mSearchFragment)
                     .addToBackStack(null)
                     .commit();
         }
