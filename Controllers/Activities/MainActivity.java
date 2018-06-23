@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         // Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.menu_action_search:
-                Intent i = new Intent(MainActivity.this, SearchActivity.class);
-                this.startActivity(i);
+                Intent i = new Intent(this, SearchActivity.class);
+                startActivity(i);
                 return true;
             case R.id.menu_main_params:
                 // do something

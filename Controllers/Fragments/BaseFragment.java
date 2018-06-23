@@ -30,7 +30,6 @@ public abstract class BaseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Get layout identifier from abstract method
         View view = inflater.inflate(getFragmentLayout(), container, false);
-
         ButterKnife.bind(this, view);
 
         callMethodsOnCreateView();

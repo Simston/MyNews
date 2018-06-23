@@ -3,21 +3,18 @@ package fr.simston.mynews.Controllers.Activities;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import fr.simston.mynews.Controllers.Utils.DateDialog;
+import fr.simston.mynews.Controllers.Fragments.SearchActivityFragments.SearchFragment;
 import fr.simston.mynews.R;
 
 public class SearchActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.et_begin_date)
-    AppCompatEditText et_begin_date;
-    @BindView(R.id.et_end_date) AppCompatEditText et_end_date;
+    private SearchFragment mSearchFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +23,9 @@ public class SearchActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        configureAndShowSearchFragment();
         configureToolbar();
 
-    }
-
-    /**
-     * onStart
-     * Initialisation des DatePicker
-     */
-    public void onStart() {
-        super.onStart();
-        etDatePickerConfig();
     }
 
     // -------
@@ -50,25 +39,18 @@ public class SearchActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    // -------
-    // ACTION
-    // -------
-    private void etDatePickerConfig(){
-        et_begin_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DateDialog dialog = new DateDialog(v);
-                android.app.FragmentTransaction ftz = getFragmentManager().beginTransaction();
-                dialog.show(ftz, "DatePicker");
-            }
-        });
-        et_end_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DateDialog dialog = new DateDialog(v);
-                android.app.FragmentTransaction ftz = getFragmentManager().beginTransaction();
-                dialog.show(ftz, "DatePicker");
-            }
-        });
+    private void configureAndShowSearchFragment() {
+        // A - Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
+        mSearchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.searchFragment);
+        if (mSearchFragment == null) {
+            // B - Create new fragment
+            mSearchFragment = new SearchFragment();
+
+            // C - Add it to FrameLayout container
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_search_fragment, mSearchFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 }
