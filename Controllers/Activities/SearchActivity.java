@@ -15,7 +15,6 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     private SearchFragment mSearchFragment;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +47,6 @@ public class SearchActivity extends AppCompatActivity {
             // C - Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_search_fragment, mSearchFragment)
-                    .addToBackStack(null)
                     .commit();
         }
     }

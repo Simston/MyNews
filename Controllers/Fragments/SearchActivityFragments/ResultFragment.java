@@ -22,7 +22,7 @@ public class ResultFragment extends BaseFragment {
 
     @Override
     protected void callMethodsOnCreateView() {
-
+        modifToolbar();
     }
 
     @Override
@@ -32,6 +32,16 @@ public class ResultFragment extends BaseFragment {
 
     @Override
     protected void executeHttpRequest() {
+
+    }
+
+    // -------------------------------
+    // Modif Toolbar in ResultFragment
+    // -------------------------------
+    private void modifToolbar(){
+//???????????
+        //ActionBar ab = ((SearchActivity) getActivity()).getSupportActionBar();
+        //ab.setDisplayHomeAsUpEnabled(true);
 
     }
 }
