@@ -13,6 +13,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.simston.mynews.Controllers.Models.MostPopularArticle.MostPopularArticles;
 import fr.simston.mynews.Controllers.Models.TopStoriesArticle.Multimedium;
 import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesArticles;
 import fr.simston.mynews.R;
@@ -22,7 +23,7 @@ import fr.simston.mynews.R;
  *
  * @version 1.0
  */
-public class TopStoriesViewHolder extends RecyclerView.ViewHolder {
+public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
 
     @BindView(R.id.topstorie_item_title)
     TextView title;
@@ -33,29 +34,41 @@ public class TopStoriesViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.fragment_item_topstories_published_date)
     TextView publishedDate;
 
-    public TopStoriesViewHolder(View itemView) {
+    public ArticlesViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void updateWithArticle(TopStoriesArticles topStoriesArticle) {
-        // Title of Article
-        this.title.setText(topStoriesArticle.getTitle());
-        // Section an Subsection of Article
-        this.section.setText(String.format("%s%s", topStoriesArticle.getSection(), ifSubsectionExist(topStoriesArticle)));
-        // Date format of Article
-        this.publishedDate.setText(formatStringDate(topStoriesArticle.getPublishedDate()));
-        // Update ImageView with Thumbnail
-        List<Multimedium> multimediumList;
-        multimediumList = topStoriesArticle.getMultimedia();
-        updateImageView(multimediumList);
+    public void updateWithArticle(T article) {
+
+        if(article instanceof TopStoriesArticles){
+            // Title of Article
+            this.title.setText(((TopStoriesArticles)article).getTitle());
+            // Section an Subsection of Article
+            this.section.setText(String.format("%s%s", ((TopStoriesArticles)article).getSection(), ifSubsectionExist(((TopStoriesArticles)article).getSubsection())));
+            // Date format of Article
+            this.publishedDate.setText(formatStringDate(((TopStoriesArticles)article).getPublishedDate()));
+            // Update ImageView with Thumbnail
+            List<Multimedium> multimediumList;
+            multimediumList = ((TopStoriesArticles)article).getMultimedia();
+            updateImageView(multimediumList);
+        }
+        else if(article instanceof MostPopularArticles){
+            // Title of Article
+            this.title.setText(((MostPopularArticles)article).getTitle());
+            this.section.setText(((MostPopularArticles)article).getSection());
+            this.publishedDate.setText(formatStringDate(((MostPopularArticles)article).getPublishedDate()));
+
+            // Update ImageView with Thumbnail
+            Glide.with(this.itemView).load(((MostPopularArticles)article).getMedia().get(0).getMediaMetadata().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
+        }
     }
 
-    private String ifSubsectionExist(TopStoriesArticles topStoriesArticles) {
+    private String ifSubsectionExist(String section) {
         String subsection;
-        Log.e("TAG", "subsection " + topStoriesArticles.getSubsection());
-        if (!topStoriesArticles.getSubsection().trim().isEmpty()) {
-            subsection = " > " + topStoriesArticles.getSubsection();
+        Log.e("TAG", "subsection " + section);
+        if (!section.trim().isEmpty()) {
+            subsection = " > " + section;
         } else {
             subsection = "";
         }
@@ -64,7 +77,7 @@ public class TopStoriesViewHolder extends RecyclerView.ViewHolder {
 
     private void updateImageView(List<Multimedium> multimediumList) {
         if (multimediumList != null && !multimediumList.isEmpty()) {
-            Glide.with(this.mImageView).load(multimediumList.get(0).getUrl()).apply(RequestOptions.centerInsideTransform()).into(this.mImageView);
+            Glide.with(this.itemView).load(multimediumList.get(0).getUrl()).apply(RequestOptions.centerInsideTransform()).into(this.mImageView);
         }
     }
 

@@ -2,46 +2,55 @@ package fr.simston.mynews.Controllers.Fragments;
 
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import fr.simston.mynews.Controllers.Activities.WebViewActivity;
+import fr.simston.mynews.Controllers.Models.MostPopularArticle.MostPopularListArticles;
 import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesListArticles;
+import fr.simston.mynews.Controllers.Utils.DefaultObserver;
 import fr.simston.mynews.Controllers.Utils.ItemClickSupport;
 import fr.simston.mynews.Controllers.Utils.NewYorkTimesStreams;
-import fr.simston.mynews.Controllers.Views.TopStoriesAdapter;
+import fr.simston.mynews.Controllers.Views.ArticlesAdapter;
 import fr.simston.mynews.R;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TopStoriesFragment extends BaseFragment {
+public class ArticlesFragment extends BaseFragment {
 
     // FOR DESIGN
     @BindView(R.id.fragment_topstories_recycler_view) RecyclerView mRecyclerView;
 
     // FOR DATA
     private Disposable mDisposable;
+    private static final String KEY_POSITION = "position";
+    private int position;
 
     // Declare Adapter
-    private TopStoriesAdapter mAdapter;
+    public static ArticlesAdapter mAdapter;
 
     // Récupérer la position du ViewPager et afficher les informations
-    public static BaseFragment newInstance(int position) {
-        return new TopStoriesFragment();
+    public static ArticlesFragment newInstance(int position) {
+
+        ArticlesFragment frag = new ArticlesFragment();
+        Bundle args = new Bundle();
+        args.putInt(KEY_POSITION, position);
+        frag.setArguments(args);
+
+        return(frag);
     }
 
     @Override
     protected int getFragmentLayout() {
-        return R.layout.top_stories_fragment;
+        return R.layout.articles_fragment;
     }
 
     @Override
@@ -50,6 +59,8 @@ public class TopStoriesFragment extends BaseFragment {
     @Override
     protected void callMethodsOnCreateView() {
         //Bundle
+        this.position = getArguments().getInt(KEY_POSITION, -1);
+
         configureRecyclerView();
         configureOnClickRecyclerView();
         executeHttpRequest();
@@ -61,9 +72,9 @@ public class TopStoriesFragment extends BaseFragment {
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
     private void configureRecyclerView(){
         // 3.2 - Create adapter passing the list of users
-        this.mAdapter = new TopStoriesAdapter(Glide.with(this));
+        mAdapter = new ArticlesAdapter(Glide.with(this));
         // 3.3 - Attach the adapter to the recyclerview to populate items
-        this.mRecyclerView.setAdapter(this.mAdapter);
+        this.mRecyclerView.setAdapter(mAdapter);
         // 3.4 - Set layout manager to position the items
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -74,32 +85,50 @@ public class TopStoriesFragment extends BaseFragment {
     // --------------
     // Execute the stream subscribing to Observable defined inside NewYorkTimesStream
     protected void executeHttpRequest(){
+        switch (position){
+            case 0: topStoriesArticlesHome();
+            break;
+            case 1: mostPopularArticles();
+            break;
+            case 2: topStoriesArticlesArts();
+            break;
+        }
 
-        this.mDisposable = NewYorkTimesStreams.streamFetchArticlesTopStories("home").subscribeWith(
-                new DisposableObserver<TopStoriesListArticles>() {
-                    @Override
-                    public void onNext(TopStoriesListArticles results) {
-                        Log.e("TAG", "On next");
-                        updateUI(results);
-                    }
+    }
 
+    private void topStoriesArticlesHome(){
+        this.mDisposable = NewYorkTimesStreams.streamFetchArticlesTopStories("home")
+                .subscribeWith(new DefaultObserver<TopStoriesListArticles>(){
                     @Override
-                    public void onError(Throwable e) {
-                        Log.e("TAG", "On error" + Log.getStackTraceString(e));
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.e("TAG", "On complete !!");
+                    public void onNext(TopStoriesListArticles topStoriesListArticles) {
+                        super.onNext(topStoriesListArticles);
+                        mAdapter.updateData(topStoriesListArticles.getResults());
                     }
                 });
     }
 
-    // -------------------
-    // UPDATE UI
-    // -------------------
-    private void updateUI(TopStoriesListArticles topStoriesListArticles){
-        mAdapter.updateData(topStoriesListArticles.getResults());
+    private void mostPopularArticles(){
+        this.mDisposable = NewYorkTimesStreams.streamFetchArticlesMostViewed()
+                .subscribeWith(new DefaultObserver<MostPopularListArticles>(){
+                    @Override
+                    public void onNext(MostPopularListArticles mostPopularListArticles) {
+                        super.onNext(mostPopularListArticles);
+                        mAdapter.updateData(mostPopularListArticles.getResults());
+                    }
+                });
+    }
+
+    private void topStoriesArticlesArts(){
+        this.mDisposable = NewYorkTimesStreams.streamFetchArticlesTopStories("arts")
+                .subscribeWith(
+                new DefaultObserver<TopStoriesListArticles>(){
+                    @Override
+                    public void onNext(TopStoriesListArticles topStoriesListArticlesArts) {
+                        super.onNext(topStoriesListArticlesArts);
+                        mAdapter.updateData(topStoriesListArticlesArts.getResults());
+
+                    }
+                });
     }
 
     // -----------------
@@ -108,7 +137,7 @@ public class TopStoriesFragment extends BaseFragment {
     // 1 - Configure item click on RecyclerView
     private void configureOnClickRecyclerView(){
 
-        ItemClickSupport.addTo(mRecyclerView, R.layout.top_stories_fragment_item)
+        ItemClickSupport.addTo(mRecyclerView, R.layout.articles_list_item)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {

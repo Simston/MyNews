@@ -4,9 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import fr.simston.mynews.Controllers.Fragments.ArtsFragment;
-import fr.simston.mynews.Controllers.Fragments.MostPopularFragment;
-import fr.simston.mynews.Controllers.Fragments.TopStoriesFragment;
+import fr.simston.mynews.Controllers.Fragments.ArticlesFragment;
 
 /**
  * Created by St&eacute;phane Simon on 14/06/2018.
@@ -27,16 +25,7 @@ public class PageAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // Page to return
-        switch (position) {
-            case 0:
-                return TopStoriesFragment.newInstance();
-            case 1:
-                return MostPopularFragment.newInstance();
-            case 2:
-                return ArtsFragment.newInstance();
-            default:
-                return null;
-        }
+        return ArticlesFragment.newInstance(position);
     }
 
     @Override

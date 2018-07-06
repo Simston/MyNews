@@ -12,6 +12,7 @@ import com.bumptech.glide.RequestManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.simston.mynews.Controllers.Models.MostPopularArticle.MostPopularArticles;
 import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesArticles;
 import fr.simston.mynews.R;
 
@@ -20,35 +21,32 @@ import fr.simston.mynews.R;
  *
  * @version 1.0
  */
-public class TopStoriesAdapter extends RecyclerView.Adapter<TopStoriesViewHolder> {
+public class ArticlesAdapter<T> extends RecyclerView.Adapter<ArticlesViewHolder> {
 
     // FOR DATA
-    private List<TopStoriesArticles> articles;
+    private List<T> articles;
     private RequestManager glide;
 
     // CONSTRUCTOR
-    public TopStoriesAdapter(List<Object> objects ,RequestManager glide) {
-        if(objects instanceof TopStoriesArticles){
-
-        }
+    public ArticlesAdapter(RequestManager glide) {
         this.articles = new ArrayList<>();
         this.glide = glide;
     }
 
     @NonNull
     @Override
-    public TopStoriesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ArticlesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // CREATE VIEW HOLDER AND INFLATING ITS XML LAYOUT
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.top_stories_fragment_item, parent, false);
+        View view = inflater.inflate(R.layout.articles_list_item, parent, false);
 
-        return new TopStoriesViewHolder(view);
+        return new ArticlesViewHolder(view);
     }
 
-    // UPDATE VIEW HOLDER WITH A GITHUBUSER
+    // UPDATE VIEW HOLDER WITH A ARTICLES
     @Override
-    public void onBindViewHolder(@NonNull TopStoriesViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ArticlesViewHolder viewHolder, int position) {
         viewHolder.updateWithArticle(this.articles.get(position));
     }
 
@@ -57,12 +55,20 @@ public class TopStoriesAdapter extends RecyclerView.Adapter<TopStoriesViewHolder
         return articles.size();
     }
 
-    public void updateData(List<TopStoriesArticles> list){
+    public void updateData(List<T> list){
         this.articles = list;
         notifyDataSetChanged();
     }
 
     public String getUrlArticle(int position){
-        return this.articles.get(position).getUrl();
+        String urlArticle = null;
+        T article = articles.get(position);
+        if(article instanceof TopStoriesArticles){
+            urlArticle = ((TopStoriesArticles)article).getUrl();
+        }
+        else if(article instanceof MostPopularArticles){
+            urlArticle = ((MostPopularArticles)article).getUrl();
+        }
+        return urlArticle;
     }
 }
