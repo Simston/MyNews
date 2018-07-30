@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/searchFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="8dp"
+    tools:layout_editor_absoluteY="25dp">
+
+    <EditText
+        android:id="@+id/editTextSearchQuery"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="LabelFor" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_layout_begin_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintWidth_percent="0.45"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSearchQuery"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:theme="@style/TextLabel">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/et_begin_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/begin_date"
+            android:inputType="numberSigned"
+            android:maxLines="1"
+            android:textSize="18sp"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:layout_editor_absoluteX="8dp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_layout_end_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSearchQuery"
+        app:layout_constraintWidth_percent="0.45"
+        android:theme="@style/TextLabel">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/et_end_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/end_date"
+            android:textColorHint="@color/colorPrimary"
+            android:inputType="numberSigned"
+            android:maxLines="1"
+            android:textSize="18sp"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:layout_editor_absoluteX="8dp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/checkBoxSearchArts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/arts"
+        app:layout_constraintStart_toStartOf="@+id/text_input_layout_begin_date"
+        app:layout_constraintTop_toBottomOf="@+id/text_input_layout_begin_date" />
+
+    <CheckBox
+        android:id="@+id/checkBoxSearchPolitics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/politics"
+        app:layout_constraintStart_toStartOf="@+id/text_input_layout_end_date"
+        app:layout_constraintTop_toBottomOf="@+id/text_input_layout_end_date" />
+
+    <CheckBox
+        android:id="@+id/checkBoxSearchBusiness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/business"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxSearchArts"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxSearchArts" />
+
+    <CheckBox
+        android:id="@+id/checkBoxSearchSport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/sports"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxSearchPolitics"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxSearchPolitics" />
+
+    <CheckBox
+        android:id="@+id/checkBoxSearchEntrepreneurs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/entrepreneurs"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxSearchBusiness"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxSearchBusiness" />
+
+    <CheckBox
+        android:id="@+id/checkBoxSearchTravel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/travel"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxSearchSport"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxSearchSport" />
+
+    <Button
+        android:id="@+id/buttonSearch"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:text="@string/search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxSearchTravel" />
+
+</android.support.constraint.ConstraintLayout>
