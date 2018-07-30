@@ -16,10 +16,10 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import fr.simston.mynews.Controllers.Fragments.BaseFragment;
-import fr.simston.mynews.Controllers.Models.SearchArticle.SearchArticles;
-import fr.simston.mynews.Controllers.Utils.DateDialog;
-import fr.simston.mynews.Controllers.Utils.NewYorkTimesService;
-import fr.simston.mynews.Controllers.Utils.NewYorkTimesStreams;
+import fr.simston.mynews.Models.SearchArticle.SearchArticles;
+import fr.simston.mynews.Utils.DateDialog;
+import fr.simston.mynews.Utils.NewYorkTimesService;
+import fr.simston.mynews.Utils.NewYorkTimesStreams;
 import fr.simston.mynews.R;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
@@ -42,14 +42,13 @@ public class SearchFragment extends BaseFragment{
     @BindView(R.id.checkBoxSearchEntrepreneurs) CheckBox mCheckBoxEntrepreneurs;
     @BindView(R.id.checkBoxSearchTravel) CheckBox mCheckBoxTravel;
 
-    String query = null;
-    String benginDate = null;
-    String endDate = null;
-    LinkedHashMap<String, String> options = new LinkedHashMap<>();
+    private String query = null;
+    private String benginDate = null;
+    private String endDate = null;
+    private LinkedHashMap<String, String> options = new LinkedHashMap<>();
 
     private ResultFragment mResultFragment;
     private Disposable mDisposable;
-
 
     public static BaseFragment newInstance() {
         return new SearchFragment();
@@ -125,7 +124,7 @@ public class SearchFragment extends BaseFragment{
                 DateDialog dialog = new DateDialog(v);
                 android.app.FragmentTransaction ftz = Objects.requireNonNull(getActivity()).getFragmentManager().beginTransaction();
                 dialog.show(ftz, "DatePicker");
-                benginDate = DateDialog.dateForRequest;
+                benginDate = dialog.getDateForRequest();
 
             }
         });
@@ -135,7 +134,7 @@ public class SearchFragment extends BaseFragment{
                 DateDialog dialog = new DateDialog(v);
                 android.app.FragmentTransaction ftz = Objects.requireNonNull(getActivity()).getFragmentManager().beginTransaction();
                 dialog.show(ftz, "DatePicker");
-                endDate = DateDialog.dateForRequest;
+                endDate = dialog.getDateForRequest();
             }
         });
     }
@@ -199,7 +198,6 @@ public class SearchFragment extends BaseFragment{
                 sb.append(optionsList.get(index));
             }else {
                 sb.append(optionsList.get(index)).append("+");
-
             }
         }
         return String.valueOf(sb);

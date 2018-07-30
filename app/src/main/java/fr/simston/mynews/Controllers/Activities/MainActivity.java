@@ -11,8 +11,9 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import fr.simston.mynews.Controllers.Views.PageAdapter;
 import fr.simston.mynews.R;
+import fr.simston.mynews.Utils.NotificationsUtils;
+import fr.simston.mynews.Views.PageAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        NotificationsUtils.sendVisualNotification("Ceci est un test", this);
 
         this.configureToolbar();
         this.configureViewPagerAndTabs();
@@ -57,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_main_params:
                 // do something
+                return true;
+            case R.id.notification_menu:
+                Intent notifIntent = new Intent(this, NotificationActivity.class);
+                startActivity(notifIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -25,6 +25,9 @@
             android:parentActivityName=".Controllers.Activities.MainActivity">
 
         </activity>
+        <activity android:name=".Controllers.Activities.NotificationActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".Controllers.Activities.MainActivity"/>
     </application>
 
 </manifest>

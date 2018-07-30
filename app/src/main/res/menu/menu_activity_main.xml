@@ -15,5 +15,14 @@
         android:title="@string/parameters"
         android:icon="@drawable/round_more_vert_white_24"
         app:showAsAction="ifRoom">
+        <!-- "file" submenu -->
+        <menu>
+            <item android:id="@+id/notification_menu"
+                android:title="@string/notification" />
+            <item android:id="@+id/help_menu"
+                android:title="@string/help" />
+            <item android:id="@+id/about_menu"
+                android:title="@string/about" />
+        </menu>
     </item>
 </menu>

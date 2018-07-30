@@ -6,19 +6,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import fr.simston.mynews.Controllers.Activities.WebViewActivity;
-import fr.simston.mynews.Controllers.Models.MostPopularArticle.MostPopularListArticles;
-import fr.simston.mynews.Controllers.Models.TopStoriesArticle.TopStoriesListArticles;
-import fr.simston.mynews.Controllers.Utils.DefaultObserver;
-import fr.simston.mynews.Controllers.Utils.ItemClickSupport;
-import fr.simston.mynews.Controllers.Utils.NewYorkTimesStreams;
-import fr.simston.mynews.Controllers.Views.ArticlesAdapter;
+import fr.simston.mynews.Models.MostPopularArticle.MostPopularListArticles;
+import fr.simston.mynews.Models.TopStoriesArticle.TopStoriesListArticles;
 import fr.simston.mynews.R;
+import fr.simston.mynews.Utils.DefaultObserver;
+import fr.simston.mynews.Utils.ItemClickSupport;
+import fr.simston.mynews.Utils.NewYorkTimesStreams;
+import fr.simston.mynews.Views.ArticlesAdapter;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -35,7 +34,7 @@ public class ArticlesFragment extends BaseFragment {
     private int position;
 
     // Declare Adapter
-    public static ArticlesAdapter mAdapter;
+    private ArticlesAdapter mAdapter;
 
     // Récupérer la position du ViewPager et afficher les informations
     public static ArticlesFragment newInstance(int position) {
@@ -136,16 +135,13 @@ public class ArticlesFragment extends BaseFragment {
     // -----------------
     // 1 - Configure item click on RecyclerView
     private void configureOnClickRecyclerView(){
-
         ItemClickSupport.addTo(mRecyclerView, R.layout.articles_list_item)
-                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                .setOnItemClickListener((recyclerView, position1, v) -> launchIntentWebView());
+    }
 
-                        Intent i = new Intent(getContext(), WebViewActivity.class);
-                        i.putExtra(WebViewActivity.EXTRA_URL, mAdapter.getUrlArticle(position) );
-                        startActivity(i);
-                    }
-                });
+    private void launchIntentWebView(){
+        Intent i = new Intent(getContext(), WebViewActivity.class);
+        i.putExtra(WebViewActivity.EXTRA_URL, mAdapter.getUrlArticle(position) );
+        startActivity(i);
     }
 }
