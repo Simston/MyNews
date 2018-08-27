@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.simston.mynews.R;
-import fr.simston.mynews.Utils.NotificationsUtils;
 import fr.simston.mynews.Views.PageAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        NotificationsUtils.sendVisualNotification("Ceci est un test", this);
+        //NotificationsUtils.sendVisualNotification("Ceci est un test", this);
 
         this.configureToolbar();
         this.configureViewPagerAndTabs();
