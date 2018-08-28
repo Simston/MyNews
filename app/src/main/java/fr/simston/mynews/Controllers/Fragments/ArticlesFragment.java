@@ -6,16 +6,22 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
 
 import butterknife.BindView;
 import fr.simston.mynews.Controllers.Activities.WebViewActivity;
 import fr.simston.mynews.Models.MostPopularArticle.MostPopularListArticles;
+import fr.simston.mynews.Models.SearchArticle.SearchArticles;
 import fr.simston.mynews.Models.TopStoriesArticle.TopStoriesListArticles;
 import fr.simston.mynews.R;
 import fr.simston.mynews.Utils.DefaultObserver;
 import fr.simston.mynews.Utils.ItemClickSupport;
+import fr.simston.mynews.Utils.NewYorkTimesService;
 import fr.simston.mynews.Utils.NewYorkTimesStreams;
 import fr.simston.mynews.Views.ArticlesAdapter;
 import io.reactivex.disposables.Disposable;
@@ -31,19 +37,20 @@ public class ArticlesFragment extends BaseFragment {
     // FOR DATA
     private Disposable mDisposable;
     private static final String KEY_POSITION = "position";
+    public static final int CASE_RESULT_FRAGMENT = 3;
+
     private int position;
+    private String queryRecovery, beginDate, endDate, checkBoxString;
 
     // Declare Adapter
     private ArticlesAdapter mAdapter;
 
     // Récupérer la position du ViewPager et afficher les informations
     public static ArticlesFragment newInstance(int position) {
-
         ArticlesFragment frag = new ArticlesFragment();
         Bundle args = new Bundle();
         args.putInt(KEY_POSITION, position);
         frag.setArguments(args);
-
         return(frag);
     }
 
@@ -59,6 +66,10 @@ public class ArticlesFragment extends BaseFragment {
     protected void callMethodsOnCreateView() {
         //Bundle
         this.position = getArguments().getInt(KEY_POSITION, -1);
+        this.queryRecovery = getArguments().getString("query");
+        this.beginDate = getArguments().getString("beginDate");
+        this.endDate = getArguments().getString("endDate");
+        this.checkBoxString = getArguments().getString("checkBoxString");
 
         configureRecyclerView();
         configureOnClickRecyclerView();
@@ -90,6 +101,8 @@ public class ArticlesFragment extends BaseFragment {
             case 1: mostPopularArticles();
             break;
             case 2: topStoriesArticlesArts();
+            break;
+            case CASE_RESULT_FRAGMENT : searchQueryArticles();
             break;
         }
 
@@ -130,16 +143,41 @@ public class ArticlesFragment extends BaseFragment {
                 });
     }
 
+    private void searchQueryArticles(){
+        LinkedHashMap<String, String> options = new LinkedHashMap<>();
+        options.put("q",this.queryRecovery);
+        if(this.beginDate != null && !this.beginDate.equals("")){
+            options.put("begin_date", this.beginDate);
+        }
+        if(this.endDate != null && !this.endDate.equals("")) {
+            options.put("end_date", this.endDate);
+        }
+        options.put("fq=news_desk", this.checkBoxString);
+        options.put("api-key", NewYorkTimesService.api);
+
+        this.mDisposable = NewYorkTimesStreams.streamFetchArticlesSearch(this.queryRecovery,Collections.unmodifiableMap(options)).subscribeWith(
+                new DefaultObserver<SearchArticles>() {
+                    @Override
+                    public void onNext(SearchArticles results) {
+                        Log.e("TAG", "On next");
+                        mAdapter.updateData(results.getResponse().getDocs());
+                        Log.e("TEST", String.valueOf(results.getResponse().getDocs().get(0).getNewsDesk()));
+                        // TITLE
+                        Log.e("TEST", String.valueOf(results.getResponse().getDocs().get(0).getHeadline().getMain()));
+                    }
+                });
+    }
+
     // -----------------
     // ACTION
     // -----------------
     // 1 - Configure item click on RecyclerView
     private void configureOnClickRecyclerView(){
         ItemClickSupport.addTo(mRecyclerView, R.layout.articles_list_item)
-                .setOnItemClickListener((recyclerView, position1, v) -> launchIntentWebView());
+                .setOnItemClickListener((recyclerView, position1, v) -> launchIntentWebView(position1));
     }
 
-    private void launchIntentWebView(){
+    private void launchIntentWebView(int position){
         Intent i = new Intent(getContext(), WebViewActivity.class);
         i.putExtra(WebViewActivity.EXTRA_URL, mAdapter.getUrlArticle(position) );
         startActivity(i);

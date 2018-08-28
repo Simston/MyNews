@@ -63,6 +63,13 @@ public class Docs {
         @SerializedName("uri")
         @Expose
         private String uri;
+        @SerializedName("section_name")
+        @Expose
+        private String sectionName;
+
+        public String getSectionName() {
+            return sectionName;
+        }
 
         public String getWebUrl() {
             return webUrl;

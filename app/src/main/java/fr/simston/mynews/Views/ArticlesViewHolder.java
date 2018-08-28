@@ -9,11 +9,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.simston.mynews.Models.MostPopularArticle.MostPopularArticles;
+import fr.simston.mynews.Models.SearchArticle.Docs;
 import fr.simston.mynews.Models.TopStoriesArticle.Multimedium;
 import fr.simston.mynews.Models.TopStoriesArticle.TopStoriesArticles;
 import fr.simston.mynews.R;
@@ -62,6 +65,22 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
             // Update ImageView with Thumbnail
             Glide.with(this.itemView).load(((MostPopularArticles)article).getMedia().get(0).getMediaMetadata().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
         }
+        else if(article instanceof Docs){
+            this.title.setText(((Docs)article).getHeadline().getMain());
+            this.section.setText(((Docs)article).getSectionName());
+            try{
+                this.publishedDate.setText(formatSearchDate(((Docs)article).getPubDate()));
+            }
+            catch (Exception e){
+                this.publishedDate.setText("");
+            }
+            try{
+                Glide.with(this.itemView).load("https://nytimes.com/"+((Docs)article).getMultimedia().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
+
+            }catch (Exception e){
+
+            }
+        }
     }
 
     private String ifSubsectionExist(String section) {
@@ -79,6 +98,12 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
         if (multimediumList != null && !multimediumList.isEmpty()) {
             Glide.with(this.itemView).load(multimediumList.get(0).getUrl()).apply(RequestOptions.centerInsideTransform()).into(this.mImageView);
         }
+    }
+
+    private String formatSearchDate(String dateString) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat simpleDateFormatFinal = new SimpleDateFormat("dd/MM/yyyy");
+        return simpleDateFormatFinal.format(simpleDateFormat.parse(dateString));
     }
 
     private String formatStringDate(String dateString) {
