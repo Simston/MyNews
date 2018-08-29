@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -75,33 +74,24 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void setOnClickButtonSearch() {
-        this.btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        this.btnSearch.setOnClickListener(view -> {
+            //force the user to fill the search field and check at least one category
+            if (mEditTextQuery.getText().toString().equals("") && checkBoxTreatment().equals("")) {
+                Toast.makeText(getApplicationContext(), "Please insert a search and check at least one category", Toast.LENGTH_SHORT).show();
+            }else if(checkBoxTreatment().equals("")){
+                Toast.makeText(getApplicationContext(), "Please check at least one category", Toast.LENGTH_SHORT).show();
+            }else if(mEditTextQuery.getText().toString().equals("")){
+                Toast.makeText(getApplicationContext(), "Please insert a search", Toast.LENGTH_SHORT).show();
+            }else {
                 Intent i = new Intent(SearchActivity.this, ResultActivity.class);
                 i.putExtra(ResultActivity.EXTRA_QUERY, mEditTextQuery.getText().toString());
                 i.putExtra(ResultActivity.EXTRA_BEGIN_DATE, benginDate);
                 i.putExtra(ResultActivity.EXTRA_END_DATE, endDate);
                 i.putExtra(ResultActivity.EXTRA_CHECKBOX, checkBoxTreatment());
                 startActivity(i);
-               // executeHttpRequest();
             }
         });
     }
-
-    private void getDataSearch(){
-        query = mEditTextQuery.getText().toString();
-        options.put("q",query);
-        if(benginDate != null && !benginDate.equals("")){
-            options.put("begin_date", benginDate);
-        }
-        if(endDate != null && !endDate.equals("")) {
-            options.put("end_date", endDate);
-        }
-        options.put("fq=news_desk", checkBoxTreatment());
-        Log.e("CheckBoxes", checkBoxTreatment());
-    }
-
     // -------------------
     // CHECKBOX TRAITEMENT
     // -------------------

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 
 import butterknife.BindView;
+import fr.simston.mynews.Controllers.Activities.SearchActivity;
 import fr.simston.mynews.Controllers.Activities.WebViewActivity;
 import fr.simston.mynews.Models.MostPopularArticle.MostPopularListArticles;
 import fr.simston.mynews.Models.SearchArticle.SearchArticles;
@@ -41,6 +43,7 @@ public class ArticlesFragment extends BaseFragment {
 
     private int position;
     private String queryRecovery, beginDate, endDate, checkBoxString;
+    private Boolean searchResultIsNotEmpty;
 
     // Declare Adapter
     private ArticlesAdapter mAdapter;
@@ -160,10 +163,13 @@ public class ArticlesFragment extends BaseFragment {
                     @Override
                     public void onNext(SearchArticles results) {
                         Log.e("TAG", "On next");
-                        mAdapter.updateData(results.getResponse().getDocs());
-                        Log.e("TEST", String.valueOf(results.getResponse().getDocs().get(0).getNewsDesk()));
-                        // TITLE
-                        Log.e("TEST", String.valueOf(results.getResponse().getDocs().get(0).getHeadline().getMain()));
+                        if(results.getResponse().getDocs().isEmpty()){
+                            Intent i = new Intent(getContext(), SearchActivity.class);
+                            startActivity(i);
+                            Toast.makeText(getContext(), "This search does not return any results", Toast.LENGTH_SHORT).show();
+                        }else {
+                            mAdapter.updateData(results.getResponse().getDocs());
+                        }
                     }
                 });
     }
@@ -178,8 +184,8 @@ public class ArticlesFragment extends BaseFragment {
     }
 
     private void launchIntentWebView(int position){
-        Intent i = new Intent(getContext(), WebViewActivity.class);
-        i.putExtra(WebViewActivity.EXTRA_URL, mAdapter.getUrlArticle(position) );
-        startActivity(i);
+            Intent i = new Intent(getContext(), WebViewActivity.class);
+            i.putExtra(WebViewActivity.EXTRA_URL, mAdapter.getUrlArticle(position) );
+            startActivity(i);
     }
 }
