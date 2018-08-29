@@ -3,6 +3,7 @@ package fr.simston.mynews.Views;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.simston.mynews.Models.MostPopularArticle.MostPopularArticles;
+import fr.simston.mynews.Models.SearchArticle.Docs;
 import fr.simston.mynews.Models.TopStoriesArticle.TopStoriesArticles;
 import fr.simston.mynews.R;
 
@@ -40,7 +42,6 @@ public class ArticlesAdapter<T> extends RecyclerView.Adapter<ArticlesViewHolder>
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.articles_list_item, parent, false);
-
         return new ArticlesViewHolder(view);
     }
 
@@ -68,6 +69,9 @@ public class ArticlesAdapter<T> extends RecyclerView.Adapter<ArticlesViewHolder>
         }
         else if(article instanceof MostPopularArticles){
             urlArticle = ((MostPopularArticles)article).getUrl();
+        }else if (article instanceof Docs){
+            urlArticle = ((Docs)article).getWebUrl();
+            Log.e("URL",urlArticle);
         }
         return urlArticle;
     }

@@ -1,6 +1,5 @@
 package fr.simston.mynews.Controllers.Activities;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -35,7 +34,6 @@ public class WebViewActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-
         String url = Objects.requireNonNull(getIntent().getExtras()).getString(EXTRA_URL);
         MyWebViewClient myWebViewClient = new MyWebViewClient();
         myWebViewClient.shouldOverrideUrlLoading(mWebView, url);
@@ -47,7 +45,6 @@ public class WebViewActivity extends AppCompatActivity {
                     mProgressBar.setVisibility(View.GONE);
                 } else {
                     mProgressBar.setVisibility(View.VISIBLE);
-
                 }
             }
         });
@@ -59,13 +56,15 @@ public class WebViewActivity extends AppCompatActivity {
         this.mWebView.destroy();
     }
 
+
     private class MyWebViewClient extends WebViewClient {
-        @SuppressLint("SetJavaScriptEnabled")
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);
-            // Enable Javascript
             WebSettings webSettings = mWebView.getSettings();
+            // Access to dom to avoid the bug, in the webview activity
+            webSettings.setDomStorageEnabled(true);
+            // Enable Javascript
             webSettings.setJavaScriptEnabled(true);
 
             // Force links and redirects to open in the WebView instead of in a browser

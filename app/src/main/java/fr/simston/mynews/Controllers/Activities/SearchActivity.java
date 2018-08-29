@@ -1,19 +1,41 @@
 package fr.simston.mynews.Controllers.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.AppCompatEditText;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import fr.simston.mynews.Controllers.Fragments.SearchActivityFragments.SearchFragment;
 import fr.simston.mynews.R;
+import fr.simston.mynews.Utils.DateDialog;
 
 public class SearchActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    private SearchFragment mSearchFragment;
+    @BindView(R.id.editTextSearchQuery) EditText mEditTextQuery;
+    @BindView(R.id.et_begin_date) AppCompatEditText et_begin_date;
+    @BindView(R.id.et_end_date) AppCompatEditText et_end_date;
+    @BindView(R.id.buttonSearch) Button btnSearch;
+
+    // Checkbox
+    @BindView(R.id.checkBoxSearchArts) CheckBox mCheckBoxArts;
+    @BindView(R.id.checkBoxSearchPolitics) CheckBox mCheckBoxPolitics;
+    @BindView(R.id.checkBoxSearchBusiness) CheckBox mCheckBoxBusiness;
+    @BindView(R.id.checkBoxSearchSport) CheckBox mCheckBoxSport;
+    @BindView(R.id.checkBoxSearchEntrepreneurs) CheckBox mCheckBoxEntrepreneurs;
+    @BindView(R.id.checkBoxSearchTravel) CheckBox mCheckBoxTravel;
+
+    private String query = null;
+    private String benginDate = null;
+    private String endDate = null;
+    private LinkedHashMap<String, String> options = new LinkedHashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,33 +43,91 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         ButterKnife.bind(this);
+        setOnClickButtonSearch();
+    }
 
-        configureAndShowSearchFragment();
-        configureToolbar();
-
+    /**
+     * onStart
+     * Initialisation des DatePicker
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        etDatePickerConfig();
     }
 
     // -------
-    // TOOLBAR
+    // ACTION
     // -------
-    private void configureToolbar() {
-        toolbar.setTitle("Search Articles");
-        setSupportActionBar(toolbar);
-        ActionBar ab = getSupportActionBar();
-        assert ab != null;
-        ab.setDisplayHomeAsUpEnabled(true);
+    private void etDatePickerConfig() {
+        this.et_begin_date.setOnClickListener(view -> {
+            DateDialog dialog = new DateDialog(view);
+            dialog.show(getFragmentManager(), "DatePicker");
+            benginDate = dialog.getDateForRequest();
+        });
+
+        this.et_end_date.setOnClickListener(view -> {
+            DateDialog dialog = new DateDialog(view);
+            dialog.show(getFragmentManager(), "DatePicker");
+            endDate = dialog.getDateForRequest();
+        });
     }
 
-    private void configureAndShowSearchFragment() {
-        // A - Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
-        mSearchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.searchFragment);
-        if (mSearchFragment == null) {
-            // B - Create new fragment
-            mSearchFragment = new SearchFragment();
-            // C - Add it to FrameLayout container
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_search_fragment, mSearchFragment)
-                    .commit();
+    private void setOnClickButtonSearch() {
+        this.btnSearch.setOnClickListener(view -> {
+            //force the user to fill the search field and check at least one category
+            if (mEditTextQuery.getText().toString().equals("") && checkBoxTreatment().equals("")) {
+                Toast.makeText(getApplicationContext(), "Please insert a search and check at least one category", Toast.LENGTH_SHORT).show();
+            }else if(checkBoxTreatment().equals("")){
+                Toast.makeText(getApplicationContext(), "Please check at least one category", Toast.LENGTH_SHORT).show();
+            }else if(mEditTextQuery.getText().toString().equals("")){
+                Toast.makeText(getApplicationContext(), "Please insert a search", Toast.LENGTH_SHORT).show();
+            }else {
+                Intent i = new Intent(SearchActivity.this, ResultActivity.class);
+                i.putExtra(ResultActivity.EXTRA_QUERY, mEditTextQuery.getText().toString());
+                i.putExtra(ResultActivity.EXTRA_BEGIN_DATE, benginDate);
+                i.putExtra(ResultActivity.EXTRA_END_DATE, endDate);
+                i.putExtra(ResultActivity.EXTRA_CHECKBOX, checkBoxTreatment());
+                startActivity(i);
+            }
+        });
+    }
+    // -------------------
+    // CHECKBOX TRAITEMENT
+    // -------------------
+    private String checkBoxTreatment() {
+        ArrayList<String> optionsList = new ArrayList<String>();
+        if (mCheckBoxArts.isChecked()) {
+            optionsList.add("arts");
         }
+        if (mCheckBoxPolitics.isChecked()) {
+            optionsList.add("politics");
+        }
+        if (mCheckBoxBusiness.isChecked()) {
+            optionsList.add("business");
+        }
+        if (mCheckBoxSport.isChecked()) {
+            optionsList.add("sport");
+        }
+        if (mCheckBoxEntrepreneurs.isChecked()) {
+            optionsList.add("entrepreneurs");
+        }
+        if (mCheckBoxTravel.isChecked()) {
+            optionsList.add("travel");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for(int index=0; index < optionsList.size(); index++) {
+            if(index == 0 && optionsList.size()-1 < 1) {
+                // if opstionList.size() have one element only
+                sb.append(optionsList.get(index));
+            } else if(index == optionsList.size() - 1) {
+                //the last element
+                sb.append(optionsList.get(index));
+            }else {
+                sb.append(optionsList.get(index)).append("+");
+            }
+        }
+        return String.valueOf(sb);
     }
 }
