@@ -25,7 +25,6 @@ public class NotificationActivity extends AppCompatActivity{
         setContentView(R.layout.notification_activity);
 
         ButterKnife.bind(this);
-
         configureToolbar();
 
     }
