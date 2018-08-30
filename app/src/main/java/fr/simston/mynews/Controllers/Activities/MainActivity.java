@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        // Verification for Notification at start
         NotificationActivity notificationActivity = new NotificationActivity();
         notificationActivity.verificationNotificationIsAtivated(this);
 

@@ -69,6 +69,7 @@ public class NotificationActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notification_activity);
 
+        // Initialize CheckBoxTreatment
         checkBoxTreatment = new CheckBoxTreatment();
 
         ButterKnife.bind(this);
@@ -87,15 +88,16 @@ public class NotificationActivity extends AppCompatActivity{
 
     /**
      * Call this method for verification of Notification preferences
-     * @param context
+     * @param context Get Context
      */
     public void verificationNotificationIsAtivated(Context context){
         String switch_activated;
+        // Recover value of SwitchButton in SharedPreferences
         this.mSharedPreferences = context.getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE);
         switch_activated = mSharedPreferences.getString(SWITCH_ACTIVATED, "");
         if(switch_activated.equals("true")){
             JobManager.create(context).addJobCreator(new JobCreatorCase());
-            NotificationsUtils.runJobImmediately();
+            NotificationsUtils.scheduleDaily();
         }
     }
 
