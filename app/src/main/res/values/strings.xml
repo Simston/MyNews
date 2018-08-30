@@ -19,4 +19,5 @@
     <string name="help">Help</string>
     <string name="about">About</string>
     <string name="switch_text">Enable notifications (one per day)</string>
+    <string name="clear">CLEAR</string>
 </resources>

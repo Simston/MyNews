@@ -1,5 +1,6 @@
 package fr.simston.mynews.Utils;
 
+import android.util.Log;
 import android.widget.CheckBox;
 
 import java.util.ArrayList;
@@ -51,6 +52,35 @@ public class CheckBoxTreatment {
             }
         }
         return String.valueOf(sb);
+    }
+
+    /**
+     * Processing the string save in SharedPreferences and check the corresponding Checkboxes
+     * @param checkBoxString String Saved with checkBoxTreatment()
+     */
+    public void stringCheckBoxTreatment(String checkBoxString){
+        String[] separated = checkBoxString.split("\\+");
+        for (String separateds: separated) {
+            Log.e("TAG", String.valueOf(separateds));
+            if(separateds.contains("arts")){
+                this.checkBoxArts.setChecked(true);
+            }
+            if(separateds.contains("politics")){
+                this.checkBoxPolitics.setChecked(true);
+            }
+            if(separateds.contains("business")){
+                this.checkBoxBusiness.setChecked(true);
+            }
+            if(separateds.contains("sport")){
+                this.checkBoxSport.setChecked(true);
+            }
+            if(separateds.contains("entrepreneurs")){
+                this.checkBoxEntrepreneurs.setChecked(true);
+            }
+            if(separateds.contains("travel")){
+                this.checkBoxTravel.setChecked(true);
+            }
+        }
     }
 
     public void setCheckBoxArts(CheckBox checkBoxArts) {

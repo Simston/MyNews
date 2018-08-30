@@ -116,4 +116,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/separator" />
+   <Button
+       android:id="@+id/clear_button_notification"
+       android:layout_width="130dp"
+       android:layout_height="wrap_content"
+       android:layout_marginEnd="8dp"
+       android:layout_marginStart="8dp"
+       android:layout_marginTop="24dp"
+       android:text="@string/clear"
+       android:backgroundTint="@color/colorPrimary"
+       android:textColor="@android:color/white"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@+id/switch1" />
 </android.support.constraint.ConstraintLayout>

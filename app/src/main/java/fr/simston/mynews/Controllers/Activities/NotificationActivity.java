@@ -1,11 +1,16 @@
 package fr.simston.mynews.Controllers.Activities;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -40,6 +45,9 @@ public class NotificationActivity extends AppCompatActivity{
     // Search Field
     @BindView(R.id.editTextSearchQueryNotif) EditText mEditTextQuery;
 
+    // Clear Button
+    @BindView(R.id.clear_button_notification) Button mClearButton;
+
     // Shared preferences key
     private final String SHARED_PREF_NOTIF = "shared_prefs_notif";
     private final String QUERY_SEARCH = "query_search";
@@ -53,15 +61,21 @@ public class NotificationActivity extends AppCompatActivity{
     // Notification Button
     @BindView(R.id.switch1) Switch mSwitchButton;
 
+    // For CheckBox treatments
+    private CheckBoxTreatment checkBoxTreatment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notification_activity);
 
+        checkBoxTreatment = new CheckBoxTreatment();
+
         ButterKnife.bind(this);
         configureToolbar();
         restoreSharedPreferences();
         treatmentNotificationButton();
+        clearButtonTreatment();
 
     }
 
@@ -100,19 +114,19 @@ public class NotificationActivity extends AppCompatActivity{
     // CHECKBOX TREATMENT
     // -------------------
     private String checkBoxVerification(){
-        CheckBoxTreatment checkBoxTreatment = new CheckBoxTreatment();
-        checkBoxTreatment.setCheckBoxArts(mCheckBoxArts);
-        checkBoxTreatment.setCheckBoxPolitics(mCheckBoxPolitics);
-        checkBoxTreatment.setCheckBoxBusiness(mCheckBoxBusiness);
-        checkBoxTreatment.setCheckBoxEntrepreneurs(mCheckBoxEntrepreneurs);
-        checkBoxTreatment.setCheckBoxSport(mCheckBoxSport);
-        checkBoxTreatment.setCheckBoxTravel(mCheckBoxTravel);
-        return checkBoxTreatment.checkBoxTreatment();
+        this.checkBoxTreatment.setCheckBoxArts(mCheckBoxArts);
+        this.checkBoxTreatment.setCheckBoxPolitics(mCheckBoxPolitics);
+        this.checkBoxTreatment.setCheckBoxBusiness(mCheckBoxBusiness);
+        this.checkBoxTreatment.setCheckBoxEntrepreneurs(mCheckBoxEntrepreneurs);
+        this.checkBoxTreatment.setCheckBoxSport(mCheckBoxSport);
+        this.checkBoxTreatment.setCheckBoxTravel(mCheckBoxTravel);
+        return this.checkBoxTreatment.checkBoxTreatment();
     }
 
     // -----------------------
     // TREATMENT NOTIF BUTTON
     // -----------------------
+    @SuppressLint("ResourceAsColor")
     private void treatmentNotificationButton(){
         mSwitchButton.setOnClickListener(view -> {
             editor = getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE).edit();
@@ -131,22 +145,75 @@ public class NotificationActivity extends AppCompatActivity{
                     editor.putString(CHECKBOX_STRING, checkBoxVerification());
                     editor.putString(SWITCH_ACTIVATED, "true");
                     editor.apply();
+                    alertDialogInterfaceOnClickSwitchButton();
                 }
             }else{
                 editor.clear().apply();
             }
+
+
         });
+    }
+    // -----------------------
+    // TREATMENT CLEAR BUTTON
+    // -----------------------
+    private void clearButtonTreatment(){
+        mClearButton.setOnClickListener(view ->{
+            editor = getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE).edit();
+            editor.clear().apply();
+            restoreSharedPreferences();
+            this.mSwitchButton.setChecked(false);
+            this.mCheckBoxArts.setChecked(false);
+            this.mCheckBoxPolitics.setChecked(false);
+            this.mCheckBoxBusiness.setChecked(false);
+            this.mCheckBoxEntrepreneurs.setChecked(false);
+            this.mCheckBoxSport.setChecked(false);
+            this.mCheckBoxTravel.setChecked(false);
+        });
+    }
+    // -------------
+    // ALERT DIALOG
+    // -------------
+    private void alertDialogInterfaceOnClickSwitchButton(){
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Notification");
+        alertDialog.setMessage("Your search is taken into account."+ "\n" +"Notifications for news articles will appear daily at noon");
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setButton(Dialog.BUTTON_POSITIVE, "OK", (dialog, which) -> {
+            alertDialog.dismiss();
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
+        });
+        alertDialog.setOnShowListener(dialog ->
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary)));
+        alertDialog.show();
     }
 
     private void restoreSharedPreferences(){
-        mSharedPreferences = getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE);
+
+        initializeCheckBox();
+        this.mSharedPreferences = getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE);
         String query = mSharedPreferences.getString(QUERY_SEARCH, "");
         String switchButton = mSharedPreferences.getString(SWITCH_ACTIVATED, "");
+        String checkBoxVerif = mSharedPreferences.getString(CHECKBOX_STRING, "");
 
-        mEditTextQuery.setText(query);
+        this.mEditTextQuery.setText(query);
         if(switchButton.equals("true")){
-            mSwitchButton.setChecked(true);
+            this.mSwitchButton.setChecked(true);
         }
-        mEditTextQuery.setText(query);
+
+        this.mEditTextQuery.setText(query);
+        if(!checkBoxVerif.equals("")){
+            this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif);
+        }
+    }
+
+    private void initializeCheckBox(){
+        this.checkBoxTreatment.setCheckBoxArts(mCheckBoxArts);
+        this.checkBoxTreatment.setCheckBoxPolitics(mCheckBoxPolitics);
+        this.checkBoxTreatment.setCheckBoxBusiness(mCheckBoxBusiness);
+        this.checkBoxTreatment.setCheckBoxEntrepreneurs(mCheckBoxEntrepreneurs);
+        this.checkBoxTreatment.setCheckBoxSport(mCheckBoxSport);
+        this.checkBoxTreatment.setCheckBoxTravel(mCheckBoxTravel);
     }
 }
