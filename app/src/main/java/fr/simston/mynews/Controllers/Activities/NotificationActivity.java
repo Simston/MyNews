@@ -141,17 +141,17 @@ public class NotificationActivity extends AppCompatActivity{
                     mSwitchButton.setChecked(false);
                     Toast.makeText(this, "Please enter a search", Toast.LENGTH_SHORT).show();
                 }else{
+                    // Save Data User
                     editor.putString(QUERY_SEARCH,mEditTextQuery.getText().toString());
                     editor.putString(CHECKBOX_STRING, checkBoxVerification());
                     editor.putString(SWITCH_ACTIVATED, "true");
                     editor.apply();
+                    // Call an AlertDialog and redirection to the MainActivity
                     alertDialogInterfaceOnClickSwitchButton();
                 }
             }else{
                 editor.clear().apply();
             }
-
-
         });
     }
     // -----------------------
@@ -160,8 +160,10 @@ public class NotificationActivity extends AppCompatActivity{
     private void clearButtonTreatment(){
         mClearButton.setOnClickListener(view ->{
             editor = getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE).edit();
+            // Remove all data in SharedPreferences
             editor.clear().apply();
-            restoreSharedPreferences();
+            // Clear UI
+            this.mEditTextQuery.setText("");
             this.mSwitchButton.setChecked(false);
             this.mCheckBoxArts.setChecked(false);
             this.mCheckBoxPolitics.setChecked(false);
@@ -188,26 +190,29 @@ public class NotificationActivity extends AppCompatActivity{
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary)));
         alertDialog.show();
     }
-
+    // --------------------
+    // RECOVERING DATA USER
+    // --------------------
     private void restoreSharedPreferences(){
-
+        // Initialize checkbox for use CheckBoxTreatment correctly
         initializeCheckBox();
+
+        // Recover all data
         this.mSharedPreferences = getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE);
         String query = mSharedPreferences.getString(QUERY_SEARCH, "");
         String switchButton = mSharedPreferences.getString(SWITCH_ACTIVATED, "");
         String checkBoxVerif = mSharedPreferences.getString(CHECKBOX_STRING, "");
 
+        // Set the data in UI
         this.mEditTextQuery.setText(query);
         if(switchButton.equals("true")){
             this.mSwitchButton.setChecked(true);
         }
-
         this.mEditTextQuery.setText(query);
         if(!checkBoxVerif.equals("")){
             this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif);
         }
     }
-
     private void initializeCheckBox(){
         this.checkBoxTreatment.setCheckBoxArts(mCheckBoxArts);
         this.checkBoxTreatment.setCheckBoxPolitics(mCheckBoxPolitics);
