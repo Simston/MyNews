@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.orm.SugarContext;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.simston.mynews.R;
@@ -27,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        // init Context for SugarORM (save data sqlite)
+        SugarContext.init(this);
 
         // Verification for Notification at start
         NotificationActivity notificationActivity = new NotificationActivity();

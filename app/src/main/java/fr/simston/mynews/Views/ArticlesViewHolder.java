@@ -19,6 +19,7 @@ import fr.simston.mynews.Models.MostPopularArticle.MostPopularArticles;
 import fr.simston.mynews.Models.SearchArticle.Docs;
 import fr.simston.mynews.Models.TopStoriesArticle.Multimedium;
 import fr.simston.mynews.Models.TopStoriesArticle.TopStoriesArticles;
+import fr.simston.mynews.Models.db.ArticleID;
 import fr.simston.mynews.R;
 
 /**
@@ -28,14 +29,10 @@ import fr.simston.mynews.R;
  */
 public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.topstorie_item_title)
-    TextView title;
-    @BindView(R.id.fragment_item_section)
-    TextView section;
-    @BindView(R.id.fragment_item_image)
-    ImageView mImageView;
-    @BindView(R.id.fragment_item_topstories_published_date)
-    TextView publishedDate;
+    @BindView(R.id.topstorie_item_title) TextView title;
+    @BindView(R.id.fragment_item_section) TextView section;
+    @BindView(R.id.fragment_item_image) ImageView mImageView;
+    @BindView(R.id.fragment_item_topstories_published_date) TextView publishedDate;
 
     public ArticlesViewHolder(View itemView) {
         super(itemView);
@@ -44,6 +41,8 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
 
     public void updateWithArticle(T article) {
 
+        String linkUrl;
+
         if(article instanceof TopStoriesArticles){
             // Title of Article
             this.title.setText(((TopStoriesArticles)article).getTitle());
@@ -51,17 +50,23 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
             this.section.setText(String.format("%s%s", ((TopStoriesArticles)article).getSection(), ifSubsectionExist(((TopStoriesArticles)article).getSubsection())));
             // Date format of Article
             this.publishedDate.setText(formatStringDate(((TopStoriesArticles)article).getPublishedDate()));
+            // Save URL
+            linkUrl = ((TopStoriesArticles)article).getUrl();
+            saveArticleUrlInDB(linkUrl);
             // Update ImageView with Thumbnail
             List<Multimedium> multimediumList;
             multimediumList = ((TopStoriesArticles)article).getMultimedia();
             updateImageView(multimediumList);
+
         }
         else if(article instanceof MostPopularArticles){
             // Title of Article
             this.title.setText(((MostPopularArticles)article).getTitle());
             this.section.setText(((MostPopularArticles)article).getSection());
             this.publishedDate.setText(formatStringDate(((MostPopularArticles)article).getPublishedDate()));
-
+            // Save URL
+            linkUrl = ((MostPopularArticles)article).getUrl();
+            saveArticleUrlInDB(linkUrl);
             // Update ImageView with Thumbnail
             Glide.with(this.itemView).load(((MostPopularArticles)article).getMedia().get(0).getMediaMetadata().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
         }
@@ -74,10 +79,13 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
             catch (Exception e){
                 this.publishedDate.setText("");
             }
+            // SAVE URL
+            linkUrl = ((Docs)article).getWebUrl();
+            saveArticleUrlInDB(linkUrl);
             try{
                 Glide.with(this.itemView).load("https://nytimes.com/"+((Docs)article).getMultimedia().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
 
-            }catch (Exception e){
+            }catch (Exception ignored){
 
             }
         }
@@ -97,6 +105,16 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
     private void updateImageView(List<Multimedium> multimediumList) {
         if (multimediumList != null && !multimediumList.isEmpty()) {
             Glide.with(this.itemView).load(multimediumList.get(0).getUrl()).apply(RequestOptions.centerInsideTransform()).into(this.mImageView);
+        }
+    }
+    // ---------------------------------------------
+    // PERSISTENCE OF DATA FOR THE URL OF AN ARTICLE
+    // ---------------------------------------------
+    private void saveArticleUrlInDB(String url){
+        ArticleID articleID = new ArticleID(url);
+        // Verif in DB if exist or not and save it.
+        if(!articleID.getIdUrl().equals(url)){
+            articleID.save();
         }
     }
 
