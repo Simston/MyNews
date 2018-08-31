@@ -9,6 +9,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.simston.mynews.R;
@@ -91,12 +93,13 @@ public class SearchActivity extends AppCompatActivity {
 
     private String checkBoxTreatmentForButtonSearch(){
         CheckBoxTreatment checkBoxTreatment = new CheckBoxTreatment();
-        checkBoxTreatment.setCheckBoxArts(mCheckBoxArts);
-        checkBoxTreatment.setCheckBoxPolitics(mCheckBoxPolitics);
-        checkBoxTreatment.setCheckBoxBusiness(mCheckBoxBusiness);
-        checkBoxTreatment.setCheckBoxEntrepreneurs(mCheckBoxEntrepreneurs);
-        checkBoxTreatment.setCheckBoxSport(mCheckBoxSport);
-        checkBoxTreatment.setCheckBoxTravel(mCheckBoxTravel);
-        return checkBoxTreatment.checkBoxTreatment();
+        ArrayList<String> arrayList = new ArrayList<>();
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxArts, CheckBoxTreatment.TAG_CHECKBOX_ART);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxPolitics, CheckBoxTreatment.TAG_CHECKBOX_POLITICS);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxBusiness ,CheckBoxTreatment.TAG_CHECKBOX_BUSINESS);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxSport, CheckBoxTreatment.TAG_CHECKBOX_SPORT);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxEntrepreneurs, CheckBoxTreatment.TAG_CHECKBOX_ENTREPRENEURS);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxTravel, CheckBoxTreatment.TAG_CHECKBOX_TRAVEL);
+        return checkBoxTreatment.convertArrayListToParam(arrayList);
     }
 }

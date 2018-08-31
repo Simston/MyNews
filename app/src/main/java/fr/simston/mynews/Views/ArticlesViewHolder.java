@@ -1,7 +1,7 @@
 package fr.simston.mynews.Views;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +33,8 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
     @BindView(R.id.fragment_item_section) TextView section;
     @BindView(R.id.fragment_item_image) ImageView mImageView;
     @BindView(R.id.fragment_item_topstories_published_date) TextView publishedDate;
+
+    private ArticleID articleID;
 
     public ArticlesViewHolder(View itemView) {
         super(itemView);
@@ -67,6 +69,8 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
             // Save URL
             linkUrl = ((MostPopularArticles)article).getUrl();
             saveArticleUrlInDB(linkUrl);
+            // Color of Title if Visited
+            colorOfTextIfVisited();
             // Update ImageView with Thumbnail
             Glide.with(this.itemView).load(((MostPopularArticles)article).getMedia().get(0).getMediaMetadata().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
         }
@@ -93,7 +97,6 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
 
     private String ifSubsectionExist(String section) {
         String subsection;
-        Log.e("TAG", "subsection " + section);
         if (!section.trim().isEmpty()) {
             subsection = " > " + section;
         } else {
@@ -111,10 +114,17 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
     // PERSISTENCE OF DATA FOR THE URL OF AN ARTICLE
     // ---------------------------------------------
     private void saveArticleUrlInDB(String url){
-        ArticleID articleID = new ArticleID(url);
+        this.articleID = new ArticleID(url, "false");
         // Verif in DB if exist or not and save it.
         if(!articleID.getIdUrl().equals(url)){
             articleID.save();
+        }
+    }
+
+    private void colorOfTextIfVisited(){
+        String alreadyVisited = this.articleID.getAlreadyVisited();
+        if(alreadyVisited.equals("true")){
+            this.title.setTextColor(Color.RED);
         }
     }
 

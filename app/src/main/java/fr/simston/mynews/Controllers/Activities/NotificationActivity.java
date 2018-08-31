@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.evernote.android.job.JobManager;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 
@@ -124,13 +125,14 @@ public class NotificationActivity extends AppCompatActivity{
     // CHECKBOX TREATMENT
     // -------------------
     private String checkBoxVerification(){
-        this.checkBoxTreatment.setCheckBoxArts(mCheckBoxArts);
-        this.checkBoxTreatment.setCheckBoxPolitics(mCheckBoxPolitics);
-        this.checkBoxTreatment.setCheckBoxBusiness(mCheckBoxBusiness);
-        this.checkBoxTreatment.setCheckBoxEntrepreneurs(mCheckBoxEntrepreneurs);
-        this.checkBoxTreatment.setCheckBoxSport(mCheckBoxSport);
-        this.checkBoxTreatment.setCheckBoxTravel(mCheckBoxTravel);
-        return this.checkBoxTreatment.checkBoxTreatment();
+        ArrayList<String> arrayList = new ArrayList<>();
+        this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxArts, CheckBoxTreatment.TAG_CHECKBOX_ART);
+        this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxPolitics, CheckBoxTreatment.TAG_CHECKBOX_POLITICS);
+        this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxBusiness ,CheckBoxTreatment.TAG_CHECKBOX_BUSINESS);
+        this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxSport, CheckBoxTreatment.TAG_CHECKBOX_SPORT);
+        this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxEntrepreneurs, CheckBoxTreatment.TAG_CHECKBOX_ENTREPRENEURS);
+        this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxTravel, CheckBoxTreatment.TAG_CHECKBOX_TRAVEL);
+        return this.checkBoxTreatment.convertArrayListToParam(arrayList);
     }
 
     // -----------------------
@@ -204,8 +206,6 @@ public class NotificationActivity extends AppCompatActivity{
     // RECOVERING DATA USER
     // --------------------
     private void restoreSharedPreferences(){
-        // Initialize checkbox for use CheckBoxTreatment correctly
-        initializeCheckBox();
 
         // Recover all data
         this.mSharedPreferences = getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE);
@@ -220,16 +220,13 @@ public class NotificationActivity extends AppCompatActivity{
         }
         this.mEditTextQuery.setText(query);
         if(!checkBoxVerif.equals("")){
-            this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif);
+            this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxArts, CheckBoxTreatment.TAG_CHECKBOX_ART);
+            this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxPolitics, CheckBoxTreatment.TAG_CHECKBOX_POLITICS);
+            this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxBusiness, CheckBoxTreatment.TAG_CHECKBOX_BUSINESS);
+            this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxEntrepreneurs, CheckBoxTreatment.TAG_CHECKBOX_ENTREPRENEURS);
+            this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxSport, CheckBoxTreatment.TAG_CHECKBOX_SPORT);
+            this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxTravel, CheckBoxTreatment.TAG_CHECKBOX_TRAVEL);
         }
-    }
-    private void initializeCheckBox(){
-        this.checkBoxTreatment.setCheckBoxArts(mCheckBoxArts);
-        this.checkBoxTreatment.setCheckBoxPolitics(mCheckBoxPolitics);
-        this.checkBoxTreatment.setCheckBoxBusiness(mCheckBoxBusiness);
-        this.checkBoxTreatment.setCheckBoxEntrepreneurs(mCheckBoxEntrepreneurs);
-        this.checkBoxTreatment.setCheckBoxSport(mCheckBoxSport);
-        this.checkBoxTreatment.setCheckBoxTravel(mCheckBoxTravel);
     }
 
     private void searchQueryArticles(){

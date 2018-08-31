@@ -1,6 +1,5 @@
 package fr.simston.mynews.Utils;
 
-import android.util.Log;
 import android.widget.CheckBox;
 
 import java.util.ArrayList;
@@ -12,32 +11,44 @@ import java.util.ArrayList;
  */
 public class CheckBoxTreatment {
 
-    private CheckBox checkBoxArts, checkBoxPolitics, checkBoxBusiness,
-                     checkBoxSport, checkBoxEntrepreneurs, checkBoxTravel;
+    public final static int TAG_CHECKBOX_ART = 10;
+    public final static int TAG_CHECKBOX_POLITICS = 20;
+    public final static int TAG_CHECKBOX_BUSINESS = 30;
+    public final static int TAG_CHECKBOX_SPORT = 40;
+    public final static int TAG_CHECKBOX_ENTREPRENEURS = 50;
+    public final static int TAG_CHECKBOX_TRAVEL = 60;
 
     // -------------------
     // CHECKBOX TREATMENT
     // -------------------
-    public String checkBoxTreatment() {
-        ArrayList<String> optionsList = new ArrayList<String>();
-        if (checkBoxArts.isChecked()) {
-            optionsList.add("arts");
+    public void createStringWithCheckboxChecked(ArrayList<String> optionsList, CheckBox checkBox, int tag) {
+
+        String param = null;
+        switch(tag){
+            case TAG_CHECKBOX_ART:
+                if(checkBox.isChecked()) param = "arts";
+                break;
+            case TAG_CHECKBOX_POLITICS:
+                if(checkBox.isChecked()) param = "politics";
+                break;
+            case TAG_CHECKBOX_BUSINESS:
+                if(checkBox.isChecked()) param = "business";
+                break;
+            case TAG_CHECKBOX_SPORT:
+                if(checkBox.isChecked()) param = "sport";
+                break;
+            case TAG_CHECKBOX_ENTREPRENEURS:
+                if(checkBox.isChecked()) param = "entrepreneurs";
+                break;
+            case TAG_CHECKBOX_TRAVEL:
+                if(checkBox.isChecked()) param = "travel";
+                break;
         }
-        if (checkBoxPolitics.isChecked()) {
-            optionsList.add("politics");
-        }
-        if (checkBoxBusiness.isChecked()) {
-            optionsList.add("business");
-        }
-        if (checkBoxSport.isChecked()) {
-            optionsList.add("sport");
-        }
-        if (checkBoxEntrepreneurs.isChecked()) {
-            optionsList.add("entrepreneurs");
-        }
-        if (checkBoxTravel.isChecked()) {
-            optionsList.add("travel");
-        }
+        optionsList.add(param);
+
+    }
+
+    public String convertArrayListToParam(ArrayList<String> optionsList){
 
         StringBuilder sb = new StringBuilder();
         for(int index=0; index < optionsList.size(); index++) {
@@ -53,57 +64,33 @@ public class CheckBoxTreatment {
         }
         return String.valueOf(sb);
     }
-
     /**
      * Processing the string save in SharedPreferences and check the corresponding Checkboxes
-     * @param checkBoxString String Saved with checkBoxTreatment()
+     * @param checkBoxString String Saved with createStringWithCheckboxChecked()
      */
-    public void stringCheckBoxTreatment(String checkBoxString){
+    public void stringCheckBoxTreatment(String checkBoxString, CheckBox checkBox, int tag){
+
         String[] separated = checkBoxString.split("\\+");
+
         for (String separateds: separated) {
-            Log.e("TAG", String.valueOf(separateds));
-            if(separateds.contains("arts")){
-                this.checkBoxArts.setChecked(true);
+            if(separateds.contains("arts") && tag == TAG_CHECKBOX_ART){
+                checkBox.setChecked(true);
             }
-            if(separateds.contains("politics")){
-                this.checkBoxPolitics.setChecked(true);
+            else if(separateds.contains("politics") && tag == TAG_CHECKBOX_POLITICS){
+                checkBox.setChecked(true);
             }
-            if(separateds.contains("business")){
-                this.checkBoxBusiness.setChecked(true);
+            else if(separateds.contains("business") && tag == TAG_CHECKBOX_BUSINESS){
+                checkBox.setChecked(true);
             }
-            if(separateds.contains("sport")){
-                this.checkBoxSport.setChecked(true);
+            else if(separateds.contains("sport") && tag == TAG_CHECKBOX_SPORT){
+                checkBox.setChecked(true);
             }
-            if(separateds.contains("entrepreneurs")){
-                this.checkBoxEntrepreneurs.setChecked(true);
+            else if(separateds.contains("entrepreneurs") && tag == TAG_CHECKBOX_ENTREPRENEURS){
+                checkBox.setChecked(true);
             }
-            if(separateds.contains("travel")){
-                this.checkBoxTravel.setChecked(true);
+            else if(separateds.contains("travel") && tag == TAG_CHECKBOX_TRAVEL){
+                checkBox.setChecked(true);
             }
         }
-    }
-
-    public void setCheckBoxArts(CheckBox checkBoxArts) {
-        this.checkBoxArts = checkBoxArts;
-    }
-
-    public void setCheckBoxPolitics(CheckBox checkBoxPolitics) {
-        this.checkBoxPolitics = checkBoxPolitics;
-    }
-
-    public void setCheckBoxBusiness(CheckBox checkBoxBusiness) {
-        this.checkBoxBusiness = checkBoxBusiness;
-    }
-
-    public void setCheckBoxSport(CheckBox checkBoxSport) {
-        this.checkBoxSport = checkBoxSport;
-    }
-
-    public void setCheckBoxEntrepreneurs(CheckBox checkBoxEntrepreneurs) {
-        this.checkBoxEntrepreneurs = checkBoxEntrepreneurs;
-    }
-
-    public void setCheckBoxTravel(CheckBox checkBoxTravel) {
-        this.checkBoxTravel = checkBoxTravel;
     }
 }
