@@ -16,6 +16,7 @@ import java.util.List;
 import fr.simston.mynews.Models.MostPopularArticle.MostPopularArticles;
 import fr.simston.mynews.Models.SearchArticle.Docs;
 import fr.simston.mynews.Models.TopStoriesArticle.TopStoriesArticles;
+import fr.simston.mynews.Models.db.ArticleID;
 import fr.simston.mynews.R;
 
 /**
@@ -28,9 +29,11 @@ public class ArticlesAdapter<T> extends RecyclerView.Adapter<ArticlesViewHolder>
     // FOR DATA
     private List<T> articles;
     private RequestManager glide;
+    private List<ArticleID> articleIDList;
 
     // CONSTRUCTOR
-    public ArticlesAdapter(RequestManager glide) {
+    public ArticlesAdapter(RequestManager glide, List<ArticleID> articleIDList) {
+        this.articleIDList = articleIDList;
         this.articles = new ArrayList<>();
         this.glide = glide;
     }
@@ -48,7 +51,7 @@ public class ArticlesAdapter<T> extends RecyclerView.Adapter<ArticlesViewHolder>
     // UPDATE VIEW HOLDER WITH A ARTICLES
     @Override
     public void onBindViewHolder(@NonNull ArticlesViewHolder viewHolder, int position) {
-        viewHolder.updateWithArticle(this.articles.get(position));
+        viewHolder.updateWithArticle(this.articles.get(position), this.articleIDList);
     }
 
     @Override
@@ -74,5 +77,9 @@ public class ArticlesAdapter<T> extends RecyclerView.Adapter<ArticlesViewHolder>
             Log.e("URL",urlArticle);
         }
         return urlArticle;
+    }
+
+    public List<ArticleID> getArticleIDList() {
+        return articleIDList;
     }
 }

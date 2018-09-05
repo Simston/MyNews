@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -20,6 +21,7 @@ import fr.simston.mynews.Controllers.Activities.WebViewActivity;
 import fr.simston.mynews.Models.MostPopularArticle.MostPopularListArticles;
 import fr.simston.mynews.Models.SearchArticle.SearchArticles;
 import fr.simston.mynews.Models.TopStoriesArticle.TopStoriesListArticles;
+import fr.simston.mynews.Models.db.ArticleID;
 import fr.simston.mynews.R;
 import fr.simston.mynews.Utils.DefaultObserver;
 import fr.simston.mynews.Utils.ItemClickSupport;
@@ -41,9 +43,11 @@ public class ArticlesFragment extends BaseFragment {
     private static final String KEY_POSITION = "position";
     public static final int CASE_RESULT_FRAGMENT = 3;
 
+    // FROM DATABASE
+    private List<ArticleID> listArticleUrl;
+
     private int position;
     private String queryRecovery, beginDate, endDate, checkBoxString;
-    private Boolean searchResultIsNotEmpty;
 
     // Declare Adapter
     private ArticlesAdapter mAdapter;
@@ -74,6 +78,8 @@ public class ArticlesFragment extends BaseFragment {
         this.endDate = getArguments().getString("endDate");
         this.checkBoxString = getArguments().getString("checkBoxString");
 
+        this.listArticleUrl = ArticleID.findWithQuery(ArticleID.class, "Select * from article_id");
+
         configureRecyclerView();
         configureOnClickRecyclerView();
         executeHttpRequest();
@@ -84,8 +90,8 @@ public class ArticlesFragment extends BaseFragment {
     // -----------------
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
     private void configureRecyclerView(){
-        // 3.2 - Create adapter passing the list of users
-        mAdapter = new ArticlesAdapter(Glide.with(this));
+        // 3.2 - Create adapter passing the list of articles
+        mAdapter = new ArticlesAdapter(Glide.with(this),this.listArticleUrl);
         // 3.3 - Attach the adapter to the recyclerview to populate items
         this.mRecyclerView.setAdapter(mAdapter);
         // 3.4 - Set layout manager to position the items
@@ -183,12 +189,21 @@ public class ArticlesFragment extends BaseFragment {
     }
 
     private void launchIntentWebView(int position){
-        // Modification of the article in database for posting links already visit
-        /*ArticleID articleID = ArticleID.findById(ArticleID.class, getId());
-        articleID.setAlreadyVisited("true");
-        articleID.save();*/
+        saveArticleUrlInDB(mAdapter.getUrlArticle(position));
         Intent i = new Intent(getContext(), WebViewActivity.class);
         i.putExtra(WebViewActivity.EXTRA_URL, mAdapter.getUrlArticle(position) );
         startActivity(i);
+    }
+
+    // ---------------------------------------------
+    // PERSISTENCE OF DATA FOR THE URL OF AN ARTICLE
+    // ---------------------------------------------
+    private void saveArticleUrlInDB(String url){
+        ArticleID articleID = new ArticleID(url);
+        // Verif in DB if exist or not and save it.
+        List<ArticleID> urlArticle = ArticleID.findWithQuery(ArticleID.class, "Select * from article_id where url_article = ?", url);
+        if(!urlArticle.contains(url)){
+            articleID.save();
+        }
     }
 }

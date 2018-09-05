@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,17 +18,13 @@ import android.widget.Toast;
 
 import com.evernote.android.job.JobManager;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.simston.mynews.R;
 import fr.simston.mynews.Utils.CheckBoxTreatment;
 import fr.simston.mynews.Utils.JobCreatorCase;
-import fr.simston.mynews.Utils.NewYorkTimesService;
 import fr.simston.mynews.Utils.NotificationsUtils;
 
 /**
@@ -56,10 +51,10 @@ public class NotificationActivity extends AppCompatActivity{
     @BindView(R.id.clear_button_notification) Button mClearButton;
 
     // Shared preferences key
-    private final String SHARED_PREF_NOTIF = "shared_prefs_notif";
-    private final String QUERY_SEARCH = "query_search";
-    private final String CHECKBOX_STRING = "checkbox_string";
-    private final String SWITCH_ACTIVATED = "switch_activated";
+    public static final String SHARED_PREF_NOTIF = "shared_prefs_notif";
+    public static final String QUERY_SEARCH = "query_search";
+    public static final String CHECKBOX_STRING = "checkbox_string";
+    public static final String SWITCH_ACTIVATED = "switch_activated";
 
     // For Data
     private SharedPreferences.Editor editor = null;
@@ -84,8 +79,6 @@ public class NotificationActivity extends AppCompatActivity{
         restoreSharedPreferences();
         treatmentNotificationButton();
         clearButtonTreatment();
-
-        searchQueryArticles();
 
     }
 
@@ -227,40 +220,5 @@ public class NotificationActivity extends AppCompatActivity{
             this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxSport, CheckBoxTreatment.TAG_CHECKBOX_SPORT);
             this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxTravel, CheckBoxTreatment.TAG_CHECKBOX_TRAVEL);
         }
-    }
-
-    private void searchQueryArticles(){
-
-        Calendar calendar = Calendar.getInstance();
-        String strDateNow;
-        SimpleDateFormat simpleDateFormatFinal = new SimpleDateFormat("dd/MM/yyyy");
-            strDateNow = simpleDateFormatFinal.format(calendar.getTime());
-            Log.e("TAG", String.valueOf(strDateNow));
-
-        // Date pour comparer avec le retour date des articles....
-
-
-        LinkedHashMap<String, String> options = new LinkedHashMap<>();
-        options.put("q",this.mEditTextQuery.getText().toString());
-        //year+""+monthAdd0(month+1)+""+day
-       // options.put("begin_date", this.beginDate);
-        options.put("fq=news_desk", this.checkBoxVerification());
-        options.put("api-key", NewYorkTimesService.api);
-
-        /*
-        this.mDisposable = NewYorkTimesStreams.streamFetchArticlesSearch(this.queryRecovery, Collections.unmodifiableMap(options)).subscribeWith(
-                new DefaultObserver<SearchArticles>() {
-                    @Override
-                    public void onNext(SearchArticles results) {
-                        Log.e("TAG", "On next");
-                        if(results.getResponse().getDocs().isEmpty()){
-                            Intent i = new Intent(getContext(), SearchActivity.class);
-                            startActivity(i);
-                            Toast.makeText(getContext(), "This search does not return any results", Toast.LENGTH_SHORT).show();
-                        }else {
-                            mAdapter.updateData(results.getResponse().getDocs());
-                        }
-                    }
-                });*/
     }
 }

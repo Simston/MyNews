@@ -10,32 +10,23 @@ import com.orm.dsl.Unique;
  */
 public class ArticleID extends SugarRecord {
 
-    @Unique String idUrl;
-    @Unique String alreadyVisited;
+    @Unique private String urlArticle;
 
     // Default constructor is necessary for SugarRecord
     public ArticleID(){
 
     }
 
-    public ArticleID(String idUrl, String alreadyVisited){
-        this.idUrl = idUrl;
-        this.alreadyVisited = alreadyVisited;
+    public ArticleID(String urlArticle){
+        this.urlArticle = urlArticle;
     }
 
-    public String getIdUrl() {
-        return idUrl;
+    public String getUrlArticle() {
+        return urlArticle;
     }
 
-    public void setIdUrl(String idUrl) {
-        this.idUrl = idUrl;
+    public void setUrlArticle(String urlArticle) {
+        this.urlArticle = urlArticle;
     }
 
-    public String getAlreadyVisited() {
-        return alreadyVisited;
-    }
-
-    public void setAlreadyVisited(String alreadyVisited) {
-        this.alreadyVisited = alreadyVisited;
-    }
 }

@@ -34,27 +34,22 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
     @BindView(R.id.fragment_item_image) ImageView mImageView;
     @BindView(R.id.fragment_item_topstories_published_date) TextView publishedDate;
 
-    private ArticleID articleID;
-
     public ArticlesViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void updateWithArticle(T article) {
-
-        String linkUrl;
+    public void updateWithArticle(T article, List<ArticleID> articleIDList) {
 
         if(article instanceof TopStoriesArticles){
             // Title of Article
             this.title.setText(((TopStoriesArticles)article).getTitle());
+            // Color of Title Text
+            changeColorTextIfAlreadyVisited(articleIDList, ((TopStoriesArticles)article).getUrl());
             // Section an Subsection of Article
             this.section.setText(String.format("%s%s", ((TopStoriesArticles)article).getSection(), ifSubsectionExist(((TopStoriesArticles)article).getSubsection())));
             // Date format of Article
             this.publishedDate.setText(formatStringDate(((TopStoriesArticles)article).getPublishedDate()));
-            // Save URL
-            linkUrl = ((TopStoriesArticles)article).getUrl();
-            saveArticleUrlInDB(linkUrl);
             // Update ImageView with Thumbnail
             List<Multimedium> multimediumList;
             multimediumList = ((TopStoriesArticles)article).getMultimedia();
@@ -66,9 +61,6 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
             this.title.setText(((MostPopularArticles)article).getTitle());
             this.section.setText(((MostPopularArticles)article).getSection());
             this.publishedDate.setText(formatStringDate(((MostPopularArticles)article).getPublishedDate()));
-            // Save URL
-            linkUrl = ((MostPopularArticles)article).getUrl();
-            saveArticleUrlInDB(linkUrl);
             // Color of Title if Visited
             colorOfTextIfVisited();
             // Update ImageView with Thumbnail
@@ -83,14 +75,20 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
             catch (Exception e){
                 this.publishedDate.setText("");
             }
-            // SAVE URL
-            linkUrl = ((Docs)article).getWebUrl();
-            saveArticleUrlInDB(linkUrl);
             try{
                 Glide.with(this.itemView).load("https://nytimes.com/"+((Docs)article).getMultimedia().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
 
             }catch (Exception ignored){
 
+            }
+        }
+    }
+
+    private void changeColorTextIfAlreadyVisited(List<ArticleID> articleIDList, String url){
+
+        for (ArticleID element : articleIDList) {
+            if (element.getUrlArticle().equals(url)) {
+                this.title.setTextColor(Color.rgb(10,187,210));
             }
         }
     }
@@ -110,22 +108,15 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
             Glide.with(this.itemView).load(multimediumList.get(0).getUrl()).apply(RequestOptions.centerInsideTransform()).into(this.mImageView);
         }
     }
-    // ---------------------------------------------
-    // PERSISTENCE OF DATA FOR THE URL OF AN ARTICLE
-    // ---------------------------------------------
-    private void saveArticleUrlInDB(String url){
-        this.articleID = new ArticleID(url, "false");
-        // Verif in DB if exist or not and save it.
-        if(!articleID.getIdUrl().equals(url)){
-            articleID.save();
-        }
-    }
+
 
     private void colorOfTextIfVisited(){
-        String alreadyVisited = this.articleID.getAlreadyVisited();
+
+        /*String alreadyVisited = this.articleID.getAlreadyVisited();
         if(alreadyVisited.equals("true")){
             this.title.setTextColor(Color.RED);
-        }
+        }*/
+
     }
 
     private String formatSearchDate(String dateString) throws ParseException {
