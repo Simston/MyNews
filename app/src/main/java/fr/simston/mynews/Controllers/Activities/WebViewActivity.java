@@ -1,5 +1,6 @@
 package fr.simston.mynews.Controllers.Activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -58,6 +59,7 @@ public class WebViewActivity extends AppCompatActivity {
 
 
     private class MyWebViewClient extends WebViewClient {
+        @SuppressLint("SetJavaScriptEnabled")
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);

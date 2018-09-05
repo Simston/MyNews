@@ -202,8 +202,9 @@ public class ArticlesFragment extends BaseFragment {
         ArticleID articleID = new ArticleID(url);
         // Verif in DB if exist or not and save it.
         List<ArticleID> urlArticle = ArticleID.findWithQuery(ArticleID.class, "Select * from article_id where url_article = ?", url);
-        if(!urlArticle.contains(url)){
+        if(urlArticle.isEmpty()){
             articleID.save();
+
         }
     }
 }

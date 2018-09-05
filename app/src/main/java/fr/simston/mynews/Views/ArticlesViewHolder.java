@@ -59,31 +59,42 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
         else if(article instanceof MostPopularArticles){
             // Title of Article
             this.title.setText(((MostPopularArticles)article).getTitle());
+            //Color of TitleText
+            changeColorTextIfAlreadyVisited(articleIDList, ((MostPopularArticles)article).getUrl());
             this.section.setText(((MostPopularArticles)article).getSection());
             this.publishedDate.setText(formatStringDate(((MostPopularArticles)article).getPublishedDate()));
-            // Color of Title if Visited
-            colorOfTextIfVisited();
             // Update ImageView with Thumbnail
-            Glide.with(this.itemView).load(((MostPopularArticles)article).getMedia().get(0).getMediaMetadata().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
+            Glide.with(this.itemView)
+                    .load(((MostPopularArticles)article).getMedia().get(0).getMediaMetadata().get(0).getUrl())
+                    .apply(RequestOptions.centerCropTransform().error(R.drawable.ny_logo).placeholder(R.drawable.ny_logo))
+                    .into(this.mImageView);
         }
         else if(article instanceof Docs){
             this.title.setText(((Docs)article).getHeadline().getMain());
             this.section.setText(((Docs)article).getSectionName());
             try{
                 this.publishedDate.setText(formatSearchDate(((Docs)article).getPubDate()));
+                //Color of TitleText
+                changeColorTextIfAlreadyVisited(articleIDList, ((Docs)article).getWebUrl());
             }
             catch (Exception e){
                 this.publishedDate.setText("");
             }
             try{
-                Glide.with(this.itemView).load("https://nytimes.com/"+((Docs)article).getMultimedia().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
-
+                Glide.with(this.itemView)
+                        .load("https://nytimes.com/"+((Docs)article).getMultimedia().get(0).getUrl())
+                        .apply(RequestOptions.centerCropTransform().error(R.drawable.ny_logo).placeholder(R.drawable.ny_logo))
+                        .into(this.mImageView);
             }catch (Exception ignored){
-
+                Glide.with(this.itemView)
+                        .load(R.drawable.ny_logo)
+                        .into(mImageView);
             }
         }
     }
-
+    // ------------------------------------
+    // CHANGE TEXT COLOR IF ALREADY VISITED
+    // ------------------------------------
     private void changeColorTextIfAlreadyVisited(List<ArticleID> articleIDList, String url){
 
         for (ArticleID element : articleIDList) {
@@ -93,7 +104,11 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
         }
     }
 
+    // --------------------------------------------
+    // CREATE A SPECIFIC STRING IF SUBSECTION EXIST
+    // --------------------------------------------
     private String ifSubsectionExist(String section) {
+
         String subsection;
         if (!section.trim().isEmpty()) {
             subsection = " > " + section;
@@ -104,19 +119,13 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
     }
 
     private void updateImageView(List<Multimedium> multimediumList) {
+
         if (multimediumList != null && !multimediumList.isEmpty()) {
-            Glide.with(this.itemView).load(multimediumList.get(0).getUrl()).apply(RequestOptions.centerInsideTransform()).into(this.mImageView);
+            Glide.with(this.itemView)
+                    .load(multimediumList.get(0).getUrl())
+                    .apply(RequestOptions.centerInsideTransform().error(R.drawable.ny_logo).placeholder(R.drawable.ny_logo))
+                    .into(this.mImageView);
         }
-    }
-
-
-    private void colorOfTextIfVisited(){
-
-        /*String alreadyVisited = this.articleID.getAlreadyVisited();
-        if(alreadyVisited.equals("true")){
-            this.title.setTextColor(Color.RED);
-        }*/
-
     }
 
     private String formatSearchDate(String dateString) throws ParseException {

@@ -78,8 +78,4 @@ public class ArticlesAdapter<T> extends RecyclerView.Adapter<ArticlesViewHolder>
         }
         return urlArticle;
     }
-
-    public List<ArticleID> getArticleIDList() {
-        return articleIDList;
-    }
 }
