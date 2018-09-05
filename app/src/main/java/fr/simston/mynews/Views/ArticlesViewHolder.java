@@ -1,7 +1,7 @@
 package fr.simston.mynews.Views;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +19,7 @@ import fr.simston.mynews.Models.MostPopularArticle.MostPopularArticles;
 import fr.simston.mynews.Models.SearchArticle.Docs;
 import fr.simston.mynews.Models.TopStoriesArticle.Multimedium;
 import fr.simston.mynews.Models.TopStoriesArticle.TopStoriesArticles;
+import fr.simston.mynews.Models.db.ArticleID;
 import fr.simston.mynews.R;
 
 /**
@@ -28,25 +29,23 @@ import fr.simston.mynews.R;
  */
 public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.topstorie_item_title)
-    TextView title;
-    @BindView(R.id.fragment_item_section)
-    TextView section;
-    @BindView(R.id.fragment_item_image)
-    ImageView mImageView;
-    @BindView(R.id.fragment_item_topstories_published_date)
-    TextView publishedDate;
+    @BindView(R.id.topstorie_item_title) TextView title;
+    @BindView(R.id.fragment_item_section) TextView section;
+    @BindView(R.id.fragment_item_image) ImageView mImageView;
+    @BindView(R.id.fragment_item_topstories_published_date) TextView publishedDate;
 
     public ArticlesViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void updateWithArticle(T article) {
+    public void updateWithArticle(T article, List<ArticleID> articleIDList) {
 
         if(article instanceof TopStoriesArticles){
             // Title of Article
             this.title.setText(((TopStoriesArticles)article).getTitle());
+            // Color of Title Text
+            changeColorTextIfAlreadyVisited(articleIDList, ((TopStoriesArticles)article).getUrl());
             // Section an Subsection of Article
             this.section.setText(String.format("%s%s", ((TopStoriesArticles)article).getSection(), ifSubsectionExist(((TopStoriesArticles)article).getSubsection())));
             // Date format of Article
@@ -55,37 +54,62 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
             List<Multimedium> multimediumList;
             multimediumList = ((TopStoriesArticles)article).getMultimedia();
             updateImageView(multimediumList);
+
         }
         else if(article instanceof MostPopularArticles){
             // Title of Article
             this.title.setText(((MostPopularArticles)article).getTitle());
+            //Color of TitleText
+            changeColorTextIfAlreadyVisited(articleIDList, ((MostPopularArticles)article).getUrl());
             this.section.setText(((MostPopularArticles)article).getSection());
             this.publishedDate.setText(formatStringDate(((MostPopularArticles)article).getPublishedDate()));
-
             // Update ImageView with Thumbnail
-            Glide.with(this.itemView).load(((MostPopularArticles)article).getMedia().get(0).getMediaMetadata().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
+            Glide.with(this.itemView)
+                    .load(((MostPopularArticles)article).getMedia().get(0).getMediaMetadata().get(0).getUrl())
+                    .apply(RequestOptions.centerCropTransform().error(R.drawable.ny_logo).placeholder(R.drawable.ny_logo))
+                    .into(this.mImageView);
         }
         else if(article instanceof Docs){
             this.title.setText(((Docs)article).getHeadline().getMain());
             this.section.setText(((Docs)article).getSectionName());
             try{
                 this.publishedDate.setText(formatSearchDate(((Docs)article).getPubDate()));
+                //Color of TitleText
+                changeColorTextIfAlreadyVisited(articleIDList, ((Docs)article).getWebUrl());
             }
             catch (Exception e){
                 this.publishedDate.setText("");
             }
             try{
-                Glide.with(this.itemView).load("https://nytimes.com/"+((Docs)article).getMultimedia().get(0).getUrl()).apply(RequestOptions.centerCropTransform()).into(this.mImageView);
+                Glide.with(this.itemView)
+                        .load("https://nytimes.com/"+((Docs)article).getMultimedia().get(0).getUrl())
+                        .apply(RequestOptions.centerCropTransform().error(R.drawable.ny_logo).placeholder(R.drawable.ny_logo))
+                        .into(this.mImageView);
+            }catch (Exception ignored){
+                Glide.with(this.itemView)
+                        .load(R.drawable.ny_logo)
+                        .into(mImageView);
+            }
+        }
+    }
+    // ------------------------------------
+    // CHANGE TEXT COLOR IF ALREADY VISITED
+    // ------------------------------------
+    private void changeColorTextIfAlreadyVisited(List<ArticleID> articleIDList, String url){
 
-            }catch (Exception e){
-
+        for (ArticleID element : articleIDList) {
+            if (element.getUrlArticle().equals(url)) {
+                this.title.setTextColor(Color.rgb(10,187,210));
             }
         }
     }
 
+    // --------------------------------------------
+    // CREATE A SPECIFIC STRING IF SUBSECTION EXIST
+    // --------------------------------------------
     private String ifSubsectionExist(String section) {
+
         String subsection;
-        Log.e("TAG", "subsection " + section);
         if (!section.trim().isEmpty()) {
             subsection = " > " + section;
         } else {
@@ -95,8 +119,12 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
     }
 
     private void updateImageView(List<Multimedium> multimediumList) {
+
         if (multimediumList != null && !multimediumList.isEmpty()) {
-            Glide.with(this.itemView).load(multimediumList.get(0).getUrl()).apply(RequestOptions.centerInsideTransform()).into(this.mImageView);
+            Glide.with(this.itemView)
+                    .load(multimediumList.get(0).getUrl())
+                    .apply(RequestOptions.centerInsideTransform().error(R.drawable.ny_logo).placeholder(R.drawable.ny_logo))
+                    .into(this.mImageView);
         }
     }
 

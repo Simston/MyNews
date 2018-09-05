@@ -10,11 +10,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.simston.mynews.R;
+import fr.simston.mynews.Utils.CheckBoxTreatment;
 import fr.simston.mynews.Utils.DateDialog;
 
 public class SearchActivity extends AppCompatActivity {
@@ -32,10 +32,8 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.checkBoxSearchEntrepreneurs) CheckBox mCheckBoxEntrepreneurs;
     @BindView(R.id.checkBoxSearchTravel) CheckBox mCheckBoxTravel;
 
-    private String query = null;
     private String benginDate = null;
     private String endDate = null;
-    private LinkedHashMap<String, String> options = new LinkedHashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +74,9 @@ public class SearchActivity extends AppCompatActivity {
     private void setOnClickButtonSearch() {
         this.btnSearch.setOnClickListener(view -> {
             //force the user to fill the search field and check at least one category
-            if (mEditTextQuery.getText().toString().equals("") && checkBoxTreatment().equals("")) {
+            if (mEditTextQuery.getText().toString().equals("") && checkBoxTreatmentForButtonSearch().equals("")) {
                 Toast.makeText(getApplicationContext(), "Please insert a search and check at least one category", Toast.LENGTH_SHORT).show();
-            }else if(checkBoxTreatment().equals("")){
+            }else if(checkBoxTreatmentForButtonSearch().equals("")){
                 Toast.makeText(getApplicationContext(), "Please check at least one category", Toast.LENGTH_SHORT).show();
             }else if(mEditTextQuery.getText().toString().equals("")){
                 Toast.makeText(getApplicationContext(), "Please insert a search", Toast.LENGTH_SHORT).show();
@@ -87,47 +85,21 @@ public class SearchActivity extends AppCompatActivity {
                 i.putExtra(ResultActivity.EXTRA_QUERY, mEditTextQuery.getText().toString());
                 i.putExtra(ResultActivity.EXTRA_BEGIN_DATE, benginDate);
                 i.putExtra(ResultActivity.EXTRA_END_DATE, endDate);
-                i.putExtra(ResultActivity.EXTRA_CHECKBOX, checkBoxTreatment());
+                i.putExtra(ResultActivity.EXTRA_CHECKBOX, checkBoxTreatmentForButtonSearch());
                 startActivity(i);
             }
         });
     }
-    // -------------------
-    // CHECKBOX TRAITEMENT
-    // -------------------
-    private String checkBoxTreatment() {
-        ArrayList<String> optionsList = new ArrayList<String>();
-        if (mCheckBoxArts.isChecked()) {
-            optionsList.add("arts");
-        }
-        if (mCheckBoxPolitics.isChecked()) {
-            optionsList.add("politics");
-        }
-        if (mCheckBoxBusiness.isChecked()) {
-            optionsList.add("business");
-        }
-        if (mCheckBoxSport.isChecked()) {
-            optionsList.add("sport");
-        }
-        if (mCheckBoxEntrepreneurs.isChecked()) {
-            optionsList.add("entrepreneurs");
-        }
-        if (mCheckBoxTravel.isChecked()) {
-            optionsList.add("travel");
-        }
 
-        StringBuilder sb = new StringBuilder();
-        for(int index=0; index < optionsList.size(); index++) {
-            if(index == 0 && optionsList.size()-1 < 1) {
-                // if opstionList.size() have one element only
-                sb.append(optionsList.get(index));
-            } else if(index == optionsList.size() - 1) {
-                //the last element
-                sb.append(optionsList.get(index));
-            }else {
-                sb.append(optionsList.get(index)).append("+");
-            }
-        }
-        return String.valueOf(sb);
+    private String checkBoxTreatmentForButtonSearch(){
+        CheckBoxTreatment checkBoxTreatment = new CheckBoxTreatment();
+        ArrayList<String> arrayList = new ArrayList<>();
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxArts, CheckBoxTreatment.TAG_CHECKBOX_ART);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxPolitics, CheckBoxTreatment.TAG_CHECKBOX_POLITICS);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxBusiness ,CheckBoxTreatment.TAG_CHECKBOX_BUSINESS);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxSport, CheckBoxTreatment.TAG_CHECKBOX_SPORT);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxEntrepreneurs, CheckBoxTreatment.TAG_CHECKBOX_ENTREPRENEURS);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxTravel, CheckBoxTreatment.TAG_CHECKBOX_TRAVEL);
+        return checkBoxTreatment.convertArrayListToParam(arrayList);
     }
 }

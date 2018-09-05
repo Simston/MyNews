@@ -9,13 +9,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.evernote.android.job.JobManager;
+import com.orm.SugarContext;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.simston.mynews.R;
-import fr.simston.mynews.Utils.JobCreatorCase;
-import fr.simston.mynews.Utils.NotificationsUtils;
 import fr.simston.mynews.Views.PageAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,11 +30,12 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        //NotificationsUtils.sendVisualNotification("Ceci est un test", this);
-        //NotificationsUtils.schedulePeriodic();
+        // init Context for SugarORM (save data sqlite)
+        SugarContext.init(this);
 
-        JobManager.create(this).addJobCreator(new JobCreatorCase());
-        NotificationsUtils.runJobImmediately();
+        // Verification for Notification at start
+        NotificationActivity notificationActivity = new NotificationActivity();
+        notificationActivity.verificationNotificationIsAtivated(this);
 
         this.configureToolbar();
         this.configureViewPagerAndTabs();
