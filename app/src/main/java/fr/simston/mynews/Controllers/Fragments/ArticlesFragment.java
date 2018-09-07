@@ -36,7 +36,8 @@ import io.reactivex.disposables.Disposable;
 public class ArticlesFragment extends BaseFragment {
 
     // FOR DESIGN
-    @BindView(R.id.fragment_topstories_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.fragment_topstories_recycler_view)
+    RecyclerView mRecyclerView;
 
     // FOR DATA
     private Disposable mDisposable;
@@ -58,7 +59,7 @@ public class ArticlesFragment extends BaseFragment {
         Bundle args = new Bundle();
         args.putInt(KEY_POSITION, position);
         frag.setArguments(args);
-        return(frag);
+        return (frag);
     }
 
     @Override
@@ -67,7 +68,9 @@ public class ArticlesFragment extends BaseFragment {
     }
 
     @Override
-    protected Disposable getDisposable() {return this.mDisposable;}
+    protected Disposable getDisposable() {
+        return this.mDisposable;
+    }
 
     @Override
     protected void callMethodsOnCreateView() {
@@ -89,37 +92,40 @@ public class ArticlesFragment extends BaseFragment {
     // CONFIGURATION
     // -----------------
     // Configure RecyclerView, Adapter, LayoutManager & glue it together
-    private void configureRecyclerView(){
+    private void configureRecyclerView() {
         // 3.2 - Create adapter passing the list of articles
-        mAdapter = new ArticlesAdapter(Glide.with(this),this.listArticleUrl);
+        mAdapter = new ArticlesAdapter(Glide.with(this), this.listArticleUrl);
         // 3.3 - Attach the adapter to the recyclerview to populate items
         this.mRecyclerView.setAdapter(mAdapter);
         // 3.4 - Set layout manager to position the items
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
     }
 
     // --------------
     // HTTP (RxJava)
     // --------------
     // Execute the stream subscribing to Observable defined inside NewYorkTimesStream
-    protected void executeHttpRequest(){
-        switch (position){
-            case 0: topStoriesArticlesHome();
-            break;
-            case 1: mostPopularArticles();
-            break;
-            case 2: topStoriesArticlesArts();
-            break;
-            case CASE_RESULT_FRAGMENT : searchQueryArticles();
-            break;
+    protected void executeHttpRequest() {
+        switch (position) {
+            case 0:
+                topStoriesArticlesHome();
+                break;
+            case 1:
+                mostPopularArticles();
+                break;
+            case 2:
+                topStoriesArticlesArts();
+                break;
+            case CASE_RESULT_FRAGMENT:
+                searchQueryArticles();
+                break;
         }
 
     }
 
-    private void topStoriesArticlesHome(){
+    private void topStoriesArticlesHome() {
         this.mDisposable = NewYorkTimesStreams.streamFetchArticlesTopStories("home")
-                .subscribeWith(new DefaultObserver<TopStoriesListArticles>(){
+                .subscribeWith(new DefaultObserver<TopStoriesListArticles>() {
                     @Override
                     public void onNext(TopStoriesListArticles topStoriesListArticles) {
                         super.onNext(topStoriesListArticles);
@@ -128,9 +134,9 @@ public class ArticlesFragment extends BaseFragment {
                 });
     }
 
-    private void mostPopularArticles(){
+    private void mostPopularArticles() {
         this.mDisposable = NewYorkTimesStreams.streamFetchArticlesMostViewed()
-                .subscribeWith(new DefaultObserver<MostPopularListArticles>(){
+                .subscribeWith(new DefaultObserver<MostPopularListArticles>() {
                     @Override
                     public void onNext(MostPopularListArticles mostPopularListArticles) {
                         super.onNext(mostPopularListArticles);
@@ -139,40 +145,40 @@ public class ArticlesFragment extends BaseFragment {
                 });
     }
 
-    private void topStoriesArticlesArts(){
+    private void topStoriesArticlesArts() {
         this.mDisposable = NewYorkTimesStreams.streamFetchArticlesTopStories("arts")
                 .subscribeWith(
-                new DefaultObserver<TopStoriesListArticles>(){
-                    @Override
-                    public void onNext(TopStoriesListArticles topStoriesListArticlesArts) {
-                        super.onNext(topStoriesListArticlesArts);
-                        mAdapter.updateData(topStoriesListArticlesArts.getResults());
+                        new DefaultObserver<TopStoriesListArticles>() {
+                            @Override
+                            public void onNext(TopStoriesListArticles topStoriesListArticlesArts) {
+                                super.onNext(topStoriesListArticlesArts);
+                                mAdapter.updateData(topStoriesListArticlesArts.getResults());
 
-                    }
-                });
+                            }
+                        });
     }
 
-    private void searchQueryArticles(){
+    private void searchQueryArticles() {
         LinkedHashMap<String, String> options = new LinkedHashMap<>();
-        options.put("q",this.queryRecovery);
-        if(this.beginDate != null && !this.beginDate.equals("")){
+        options.put("q", this.queryRecovery);
+        if (this.beginDate != null && !this.beginDate.equals("")) {
             options.put("begin_date", this.beginDate);
         }
-        if(this.endDate != null && !this.endDate.equals("")) {
+        if (this.endDate != null && !this.endDate.equals("")) {
             options.put("end_date", this.endDate);
         }
         options.put("fq=news_desk", this.checkBoxString);
         options.put("api-key", NewYorkTimesService.api);
 
-        this.mDisposable = NewYorkTimesStreams.streamFetchArticlesSearch(this.queryRecovery,Collections.unmodifiableMap(options)).subscribeWith(
+        this.mDisposable = NewYorkTimesStreams.streamFetchArticlesSearch(this.queryRecovery, Collections.unmodifiableMap(options)).subscribeWith(
                 new DefaultObserver<SearchArticles>() {
                     @Override
                     public void onNext(SearchArticles results) {
                         Log.e("TAG", "On next");
-                        if(results.getResponse().getDocs().isEmpty()){
+                        if (results.getResponse().getDocs().isEmpty()) {
                             Objects.requireNonNull(getActivity()).finish();
                             Toast.makeText(getContext(), "This search does not return any results", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             mAdapter.updateData(results.getResponse().getDocs());
                         }
                     }
@@ -183,26 +189,26 @@ public class ArticlesFragment extends BaseFragment {
     // ACTION
     // -----------------
     // 1 - Configure item click on RecyclerView
-    private void configureOnClickRecyclerView(){
+    private void configureOnClickRecyclerView() {
         ItemClickSupport.addTo(mRecyclerView, R.layout.articles_list_item)
                 .setOnItemClickListener((recyclerView, position1, v) -> launchIntentWebView(position1));
     }
 
-    private void launchIntentWebView(int position){
+    private void launchIntentWebView(int position) {
         saveArticleUrlInDB(mAdapter.getUrlArticle(position));
         Intent i = new Intent(getContext(), WebViewActivity.class);
-        i.putExtra(WebViewActivity.EXTRA_URL, mAdapter.getUrlArticle(position) );
+        i.putExtra(WebViewActivity.EXTRA_URL, mAdapter.getUrlArticle(position));
         startActivity(i);
     }
 
     // ---------------------------------------------
     // PERSISTENCE OF DATA FOR THE URL OF AN ARTICLE
     // ---------------------------------------------
-    private void saveArticleUrlInDB(String url){
+    private void saveArticleUrlInDB(String url) {
         ArticleID articleID = new ArticleID(url);
         // Verif in DB if exist or not and save it.
         List<ArticleID> urlArticle = ArticleID.findWithQuery(ArticleID.class, "Select * from article_id where url_article = ?", url);
-        if(urlArticle.isEmpty()){
+        if (urlArticle.isEmpty()) {
             articleID.save();
 
         }

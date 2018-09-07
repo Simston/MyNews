@@ -24,13 +24,11 @@ public class MediaMetadatum {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public MediaMetadatum() {
     }
 
     /**
-     *
      * @param height
      * @param width
      * @param format

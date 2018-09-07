@@ -21,5 +21,5 @@ public class TopStoriesListArticles {
 
     public void setResults(List<TopStoriesArticles> results) {
         this.results = results;
-}
+    }
 }

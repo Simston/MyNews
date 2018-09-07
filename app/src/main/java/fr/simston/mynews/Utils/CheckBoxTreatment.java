@@ -24,71 +24,68 @@ public class CheckBoxTreatment {
     public void createStringWithCheckboxChecked(ArrayList<String> optionsList, CheckBox checkBox, int tag) {
 
         String param = null;
-        switch(tag){
+        switch (tag) {
             case TAG_CHECKBOX_ART:
-                if(checkBox.isChecked()) param = "arts";
+                if (checkBox.isChecked()) param = "arts";
                 break;
             case TAG_CHECKBOX_POLITICS:
-                if(checkBox.isChecked()) param = "politics";
+                if (checkBox.isChecked()) param = "politics";
                 break;
             case TAG_CHECKBOX_BUSINESS:
-                if(checkBox.isChecked()) param = "business";
+                if (checkBox.isChecked()) param = "business";
                 break;
             case TAG_CHECKBOX_SPORT:
-                if(checkBox.isChecked()) param = "sport";
+                if (checkBox.isChecked()) param = "sport";
                 break;
             case TAG_CHECKBOX_ENTREPRENEURS:
-                if(checkBox.isChecked()) param = "entrepreneurs";
+                if (checkBox.isChecked()) param = "entrepreneurs";
                 break;
             case TAG_CHECKBOX_TRAVEL:
-                if(checkBox.isChecked()) param = "travel";
+                if (checkBox.isChecked()) param = "travel";
                 break;
         }
         optionsList.add(param);
 
     }
 
-    public String convertArrayListToParam(ArrayList<String> optionsList){
+    public String convertArrayListToParam(ArrayList<String> optionsList) {
 
         StringBuilder sb = new StringBuilder();
-        for(int index=0; index < optionsList.size(); index++) {
-            if(index == 0 && optionsList.size()-1 < 1) {
+        for (int index = 0; index < optionsList.size(); index++) {
+            if (index == 0 && optionsList.size() - 1 < 1) {
                 // if opstionList.size() have one element only
                 sb.append(optionsList.get(index));
-            } else if(index == optionsList.size() - 1) {
+            } else if (index == optionsList.size() - 1) {
                 //the last element
                 sb.append(optionsList.get(index));
-            }else {
+            } else {
                 sb.append(optionsList.get(index)).append("+");
             }
         }
         return String.valueOf(sb);
     }
+
     /**
      * Processing the string save in SharedPreferences and check the corresponding Checkboxes
+     *
      * @param checkBoxString String Saved with createStringWithCheckboxChecked()
      */
-    public void stringCheckBoxTreatment(String checkBoxString, CheckBox checkBox, int tag){
+    public void stringCheckBoxTreatment(String checkBoxString, CheckBox checkBox, int tag) {
 
         String[] separated = checkBoxString.split("\\+");
 
-        for (String separateds: separated) {
-            if(separateds.contains("arts") && tag == TAG_CHECKBOX_ART){
+        for (String separateds : separated) {
+            if (separateds.contains("arts") && tag == TAG_CHECKBOX_ART) {
                 checkBox.setChecked(true);
-            }
-            else if(separateds.contains("politics") && tag == TAG_CHECKBOX_POLITICS){
+            } else if (separateds.contains("politics") && tag == TAG_CHECKBOX_POLITICS) {
                 checkBox.setChecked(true);
-            }
-            else if(separateds.contains("business") && tag == TAG_CHECKBOX_BUSINESS){
+            } else if (separateds.contains("business") && tag == TAG_CHECKBOX_BUSINESS) {
                 checkBox.setChecked(true);
-            }
-            else if(separateds.contains("sport") && tag == TAG_CHECKBOX_SPORT){
+            } else if (separateds.contains("sport") && tag == TAG_CHECKBOX_SPORT) {
                 checkBox.setChecked(true);
-            }
-            else if(separateds.contains("entrepreneurs") && tag == TAG_CHECKBOX_ENTREPRENEURS){
+            } else if (separateds.contains("entrepreneurs") && tag == TAG_CHECKBOX_ENTREPRENEURS) {
                 checkBox.setChecked(true);
-            }
-            else if(separateds.contains("travel") && tag == TAG_CHECKBOX_TRAVEL){
+            } else if (separateds.contains("travel") && tag == TAG_CHECKBOX_TRAVEL) {
                 checkBox.setChecked(true);
             }
         }

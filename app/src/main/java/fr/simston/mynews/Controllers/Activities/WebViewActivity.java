@@ -25,8 +25,10 @@ public class WebViewActivity extends AppCompatActivity {
 
     public static String EXTRA_URL = "url";
 
-    @BindView(R.id.webView) WebView mWebView;
-    @BindView(R.id.progressBarWebViewActivity) ProgressBar mProgressBar;
+    @BindView(R.id.webView)
+    WebView mWebView;
+    @BindView(R.id.progressBarWebViewActivity)
+    ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

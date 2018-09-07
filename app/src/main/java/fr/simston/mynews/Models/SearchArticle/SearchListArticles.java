@@ -12,16 +12,16 @@ import java.util.List;
  */
 public class SearchListArticles {
 
-        @SerializedName("docs")
-        @Expose
-        private List<Docs> docs = null;
+    @SerializedName("docs")
+    @Expose
+    private List<Docs> docs = null;
 
-        public List<Docs> getDocs() {
-            return docs;
-        }
+    public List<Docs> getDocs() {
+        return docs;
+    }
 
-        public void setDocs(List<Docs> docs) {
-            this.docs = docs;
-        }
+    public void setDocs(List<Docs> docs) {
+        this.docs = docs;
+    }
 
 }

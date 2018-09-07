@@ -15,8 +15,6 @@ import android.util.Log;
 import com.evernote.android.job.DailyJob;
 import com.evernote.android.job.JobRequest;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
@@ -52,14 +50,14 @@ public final class NotificationsUtils extends DailyJob {
         return DailyJobResult.SUCCESS;
     }
 
-    public static void scheduleDaily(){
+    public static void scheduleDaily() {
         DailyJob.schedule(new JobRequest.Builder(NotificationsUtils.TAG),
-                TimeUnit.HOURS.toMillis(12), TimeUnit.HOURS.toMillis(12)+TimeUnit.MINUTES.toMillis(15));
+                TimeUnit.HOURS.toMillis(12), TimeUnit.HOURS.toMillis(12) + TimeUnit.MINUTES.toMillis(15));
     }
 
     // For Jobs every 15minutes (minimum)
     public static void schedulePeriodic() {
-                new JobRequest.Builder(NotificationsUtils.TAG)
+        new JobRequest.Builder(NotificationsUtils.TAG)
                 .setPeriodic(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(5))
                 .setUpdateCurrent(true)
                 //.setPersisted(true)
@@ -75,21 +73,11 @@ public final class NotificationsUtils extends DailyJob {
                 .schedule();
     }
 
-    private void searchQueryArticles(){
-
-        Calendar calendar = Calendar.getInstance();
-        String strDateNow;
-        SimpleDateFormat simpleDateFormatFinal = new SimpleDateFormat("yyyyMMdd");
-        Log.e("TEST DATE", String.valueOf(simpleDateFormatFinal));
-        //year+""+monthAdd0(month+1)+""+day
-        strDateNow = simpleDateFormatFinal.format(calendar.getTime());
-        Log.e("TAG", String.valueOf(strDateNow));
-
+    private void searchQueryArticles() {
         // Recover all data
         SharedPreferences mSharedPreferences = getContext().getSharedPreferences(NotificationActivity.SHARED_PREF_NOTIF, MODE_PRIVATE);
         String query = mSharedPreferences.getString(NotificationActivity.QUERY_SEARCH, "");
         String checkBoxVerif = mSharedPreferences.getString(NotificationActivity.CHECKBOX_STRING, "");
-
 
         LinkedHashMap<String, String> options = new LinkedHashMap<>();
         options.put("q", query);
@@ -101,12 +89,12 @@ public final class NotificationsUtils extends DailyJob {
                     @Override
                     public void onNext(SearchArticles results) {
                         Log.e("TAG", "On next");
-                            showNotification(results.getResponse().getDocs().size());
+                        showNotification(results.getResponse().getDocs().size());
                     }
                 }));
     }
 
-    private void showNotification(int numberArticles){
+    private void showNotification(int numberArticles) {
         // 1 - Create an Intent that will be shown when user will click on the Notification
         Intent intent = new Intent(getContext(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -114,7 +102,7 @@ public final class NotificationsUtils extends DailyJob {
         // 2 - Create a Style for the Notification
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle("New articles available");
-        inboxStyle.addLine("There is "+ numberArticles + " article available");
+        inboxStyle.addLine("There is " + numberArticles + " article available");
 
         // 3 - Create a Channel (Android 8)
         String channelId = "Articles channel";

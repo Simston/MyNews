@@ -27,13 +27,11 @@ public class MostPopularListArticles {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public MostPopularListArticles() {
     }
 
     /**
-     *
      * @param results
      * @param status
      * @param numResults

@@ -10,14 +10,15 @@ import com.orm.dsl.Unique;
  */
 public class ArticleID extends SugarRecord {
 
-    @Unique private String urlArticle;
+    @Unique
+    private String urlArticle;
 
     // Default constructor is necessary for SugarRecord
-    public ArticleID(){
+    public ArticleID() {
 
     }
 
-    public ArticleID(String urlArticle){
+    public ArticleID(String urlArticle) {
         this.urlArticle = urlArticle;
     }
 

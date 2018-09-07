@@ -22,7 +22,7 @@ public interface NewYorkTimesService {
     @GET("{section}.{format}")
     Observable<TopStoriesListArticles> getTopStoriesArticles(@Path("section") String section, @Path("format") String format, @Query("apikey") String apikey);
 
-    public static final Retrofit retrofit = new Retrofit.Builder()
+    Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("http://api.nytimes.com/svc/topstories/v2/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

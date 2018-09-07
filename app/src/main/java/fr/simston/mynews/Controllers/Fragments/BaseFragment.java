@@ -19,12 +19,16 @@ public abstract class BaseFragment extends Fragment {
 
     // Force to implement those methods
     protected abstract int getFragmentLayout();
+
     protected abstract void callMethodsOnCreateView();
+
     protected abstract Disposable getDisposable();
+
     protected abstract void executeHttpRequest();
 
 
     private Disposable mDisposable;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,8 +53,9 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(this.mDisposable != null) this.disposeWhenDestroy();
+        if (this.mDisposable != null) this.disposeWhenDestroy();
     }
+
     private void disposeWhenDestroy() {
         if (!this.mDisposable.isDisposed()) this.mDisposable.dispose();
     }

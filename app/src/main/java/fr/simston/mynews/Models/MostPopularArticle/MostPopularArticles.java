@@ -69,13 +69,11 @@ public class MostPopularArticles {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public MostPopularArticles() {
     }
 
     /**
-     *
      * @param adxKeywords
      * @param perFacet
      * @param orgFacet

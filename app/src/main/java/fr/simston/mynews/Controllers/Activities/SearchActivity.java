@@ -19,18 +19,28 @@ import fr.simston.mynews.Utils.DateDialog;
 
 public class SearchActivity extends AppCompatActivity {
 
-    @BindView(R.id.editTextSearchQuery) EditText mEditTextQuery;
-    @BindView(R.id.et_begin_date) AppCompatEditText et_begin_date;
-    @BindView(R.id.et_end_date) AppCompatEditText et_end_date;
-    @BindView(R.id.buttonSearch) Button btnSearch;
+    @BindView(R.id.editTextSearchQuery)
+    EditText mEditTextQuery;
+    @BindView(R.id.et_begin_date)
+    AppCompatEditText et_begin_date;
+    @BindView(R.id.et_end_date)
+    AppCompatEditText et_end_date;
+    @BindView(R.id.buttonSearch)
+    Button btnSearch;
 
     // Checkbox
-    @BindView(R.id.checkBoxSearchArts) CheckBox mCheckBoxArts;
-    @BindView(R.id.checkBoxSearchPolitics) CheckBox mCheckBoxPolitics;
-    @BindView(R.id.checkBoxSearchBusiness) CheckBox mCheckBoxBusiness;
-    @BindView(R.id.checkBoxSearchSport) CheckBox mCheckBoxSport;
-    @BindView(R.id.checkBoxSearchEntrepreneurs) CheckBox mCheckBoxEntrepreneurs;
-    @BindView(R.id.checkBoxSearchTravel) CheckBox mCheckBoxTravel;
+    @BindView(R.id.checkBoxSearchArts)
+    CheckBox mCheckBoxArts;
+    @BindView(R.id.checkBoxSearchPolitics)
+    CheckBox mCheckBoxPolitics;
+    @BindView(R.id.checkBoxSearchBusiness)
+    CheckBox mCheckBoxBusiness;
+    @BindView(R.id.checkBoxSearchSport)
+    CheckBox mCheckBoxSport;
+    @BindView(R.id.checkBoxSearchEntrepreneurs)
+    CheckBox mCheckBoxEntrepreneurs;
+    @BindView(R.id.checkBoxSearchTravel)
+    CheckBox mCheckBoxTravel;
 
     private String benginDate = null;
     private String endDate = null;
@@ -76,11 +86,11 @@ public class SearchActivity extends AppCompatActivity {
             //force the user to fill the search field and check at least one category
             if (mEditTextQuery.getText().toString().equals("") && checkBoxTreatmentForButtonSearch().equals("")) {
                 Toast.makeText(getApplicationContext(), "Please insert a search and check at least one category", Toast.LENGTH_SHORT).show();
-            }else if(checkBoxTreatmentForButtonSearch().equals("")){
+            } else if (checkBoxTreatmentForButtonSearch().equals("")) {
                 Toast.makeText(getApplicationContext(), "Please check at least one category", Toast.LENGTH_SHORT).show();
-            }else if(mEditTextQuery.getText().toString().equals("")){
+            } else if (mEditTextQuery.getText().toString().equals("")) {
                 Toast.makeText(getApplicationContext(), "Please insert a search", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
                 Intent i = new Intent(SearchActivity.this, ResultActivity.class);
                 i.putExtra(ResultActivity.EXTRA_QUERY, mEditTextQuery.getText().toString());
                 i.putExtra(ResultActivity.EXTRA_BEGIN_DATE, benginDate);
@@ -91,12 +101,12 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private String checkBoxTreatmentForButtonSearch(){
+    private String checkBoxTreatmentForButtonSearch() {
         CheckBoxTreatment checkBoxTreatment = new CheckBoxTreatment();
         ArrayList<String> arrayList = new ArrayList<>();
         checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxArts, CheckBoxTreatment.TAG_CHECKBOX_ART);
         checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxPolitics, CheckBoxTreatment.TAG_CHECKBOX_POLITICS);
-        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxBusiness ,CheckBoxTreatment.TAG_CHECKBOX_BUSINESS);
+        checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxBusiness, CheckBoxTreatment.TAG_CHECKBOX_BUSINESS);
         checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxSport, CheckBoxTreatment.TAG_CHECKBOX_SPORT);
         checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxEntrepreneurs, CheckBoxTreatment.TAG_CHECKBOX_ENTREPRENEURS);
         checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxTravel, CheckBoxTreatment.TAG_CHECKBOX_TRAVEL);

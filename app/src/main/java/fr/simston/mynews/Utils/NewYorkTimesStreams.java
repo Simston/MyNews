@@ -17,7 +17,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class NewYorkTimesStreams {
 
-    public static Observable<TopStoriesListArticles> streamFetchArticlesTopStories(String section){
+    public static Observable<TopStoriesListArticles> streamFetchArticlesTopStories(String section) {
         NewYorkTimesService newYorkTimesService = NewYorkTimesService.retrofit.create(NewYorkTimesService.class);
         return newYorkTimesService.getTopStoriesArticles(section, NewYorkTimesService.format, NewYorkTimesService.api)
                 .subscribeOn(Schedulers.io())
@@ -25,15 +25,15 @@ public class NewYorkTimesStreams {
                 .timeout(10, TimeUnit.SECONDS);
     }
 
-    public static Observable<MostPopularListArticles> streamFetchArticlesMostViewed(){
+    public static Observable<MostPopularListArticles> streamFetchArticlesMostViewed() {
         MostPopularService mostPopularService = MostPopularService.retrofit.create(MostPopularService.class);
-        return mostPopularService.getMostPoularArticles("all-sections","1.json", NewYorkTimesService.api)
+        return mostPopularService.getMostPoularArticles("all-sections", "1.json", NewYorkTimesService.api)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(10, TimeUnit.SECONDS);
     }
 
-    public static Observable<SearchArticles> streamFetchArticlesSearch(String query, Map<String, String> options){
+    public static Observable<SearchArticles> streamFetchArticlesSearch(String query, Map<String, String> options) {
         SearchArticlesService searchArticlesService = SearchArticlesService.retrofit.create(SearchArticlesService.class);
         return searchArticlesService.getSearchArticles(query, options)
                 .subscribeOn(Schedulers.io())

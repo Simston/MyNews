@@ -32,13 +32,11 @@ public class Medium {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public Medium() {
     }
 
     /**
-     *
      * @param subtype
      * @param mediaMetadata
      * @param caption

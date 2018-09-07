@@ -19,9 +19,12 @@ import fr.simston.mynews.Views.PageAdapter;
 public class MainActivity extends AppCompatActivity {
 
     // For Design
-    @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.activity_main_tabs) TabLayout mTabLayout;
-    @BindView(R.id.activity_main_viewpager) ViewPager pager;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.activity_main_tabs)
+    TabLayout mTabLayout;
+    @BindView(R.id.activity_main_viewpager)
+    ViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

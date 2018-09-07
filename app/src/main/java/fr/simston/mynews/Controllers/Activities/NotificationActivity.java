@@ -32,36 +32,46 @@ import fr.simston.mynews.Utils.NotificationsUtils;
  *
  * @version 1.0
  */
-public class NotificationActivity extends AppCompatActivity{
+public class NotificationActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbarNotif) Toolbar toolbar;
+    @BindView(R.id.toolbarNotif)
+    Toolbar toolbar;
 
     // Checkbox
-    @BindView(R.id.checkBoxNotifArts) CheckBox mCheckBoxArts;
-    @BindView(R.id.checkBoxNotifPolitics) CheckBox mCheckBoxPolitics;
-    @BindView(R.id.checkBoxNotifBusiness) CheckBox mCheckBoxBusiness;
-    @BindView(R.id.checkBoxNotifSports) CheckBox mCheckBoxSport;
-    @BindView(R.id.checkBoxNotifEntrepreneurs) CheckBox mCheckBoxEntrepreneurs;
-    @BindView(R.id.checkBoxNotifTravel) CheckBox mCheckBoxTravel;
+    @BindView(R.id.checkBoxNotifArts)
+    CheckBox mCheckBoxArts;
+    @BindView(R.id.checkBoxNotifPolitics)
+    CheckBox mCheckBoxPolitics;
+    @BindView(R.id.checkBoxNotifBusiness)
+    CheckBox mCheckBoxBusiness;
+    @BindView(R.id.checkBoxNotifSports)
+    CheckBox mCheckBoxSport;
+    @BindView(R.id.checkBoxNotifEntrepreneurs)
+    CheckBox mCheckBoxEntrepreneurs;
+    @BindView(R.id.checkBoxNotifTravel)
+    CheckBox mCheckBoxTravel;
 
     // Search Field
-    @BindView(R.id.editTextSearchQueryNotif) EditText mEditTextQuery;
+    @BindView(R.id.editTextSearchQueryNotif)
+    EditText mEditTextQuery;
 
     // Clear Button
-    @BindView(R.id.clear_button_notification) Button mClearButton;
+    @BindView(R.id.clear_button_notification)
+    Button mClearButton;
 
     // Shared preferences key
     public static final String SHARED_PREF_NOTIF = "shared_prefs_notif";
     public static final String QUERY_SEARCH = "query_search";
     public static final String CHECKBOX_STRING = "checkbox_string";
-    public static final String SWITCH_ACTIVATED = "switch_activated";
+    private static final String SWITCH_ACTIVATED = "switch_activated";
 
     // For Data
     private SharedPreferences.Editor editor = null;
     private SharedPreferences mSharedPreferences;
 
     // Notification Button
-    @BindView(R.id.switch1) Switch mSwitchButton;
+    @BindView(R.id.switch1)
+    Switch mSwitchButton;
 
     // For CheckBox treatments
     private CheckBoxTreatment checkBoxTreatment;
@@ -90,14 +100,15 @@ public class NotificationActivity extends AppCompatActivity{
 
     /**
      * Call this method for verification of Notification preferences
+     *
      * @param context Get Context
      */
-    public void verificationNotificationIsAtivated(Context context){
+    public void verificationNotificationIsAtivated(Context context) {
         String switch_activated;
         // Recover value of SwitchButton in SharedPreferences
         this.mSharedPreferences = context.getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE);
         switch_activated = mSharedPreferences.getString(SWITCH_ACTIVATED, "");
-        if(switch_activated.equals("true")){
+        if (switch_activated.equals("true")) {
             JobManager.create(context).addJobCreator(new JobCreatorCase());
             NotificationsUtils.scheduleDaily();
         }
@@ -117,11 +128,11 @@ public class NotificationActivity extends AppCompatActivity{
     // -------------------
     // CHECKBOX TREATMENT
     // -------------------
-    private String checkBoxVerification(){
+    private String checkBoxVerification() {
         ArrayList<String> arrayList = new ArrayList<>();
         this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxArts, CheckBoxTreatment.TAG_CHECKBOX_ART);
         this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxPolitics, CheckBoxTreatment.TAG_CHECKBOX_POLITICS);
-        this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxBusiness ,CheckBoxTreatment.TAG_CHECKBOX_BUSINESS);
+        this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxBusiness, CheckBoxTreatment.TAG_CHECKBOX_BUSINESS);
         this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxSport, CheckBoxTreatment.TAG_CHECKBOX_SPORT);
         this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxEntrepreneurs, CheckBoxTreatment.TAG_CHECKBOX_ENTREPRENEURS);
         this.checkBoxTreatment.createStringWithCheckboxChecked(arrayList, mCheckBoxTravel, CheckBoxTreatment.TAG_CHECKBOX_TRAVEL);
@@ -132,38 +143,39 @@ public class NotificationActivity extends AppCompatActivity{
     // TREATMENT NOTIF BUTTON
     // -----------------------
     @SuppressLint("ResourceAsColor")
-    private void treatmentNotificationButton(){
+    private void treatmentNotificationButton() {
         mSwitchButton.setOnClickListener(view -> {
             editor = getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE).edit();
-            if(mSwitchButton.isChecked()){
-                if(checkBoxVerification().equals("") && mEditTextQuery.getText().toString().equals("")){
+            if (mSwitchButton.isChecked()) {
+                if (checkBoxVerification().equals("") && mEditTextQuery.getText().toString().equals("")) {
                     mSwitchButton.setChecked(false);
                     Toast.makeText(this, "Please enter a search, and select at least one category", Toast.LENGTH_SHORT).show();
-                }else if(checkBoxVerification().equals("")){
+                } else if (checkBoxVerification().equals("")) {
                     mSwitchButton.setChecked(false);
                     Toast.makeText(this, "Please select at least one category", Toast.LENGTH_SHORT).show();
-                }else if(mEditTextQuery.getText().toString().equals("")){
+                } else if (mEditTextQuery.getText().toString().equals("")) {
                     mSwitchButton.setChecked(false);
                     Toast.makeText(this, "Please enter a search", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     // Save Data User
-                    editor.putString(QUERY_SEARCH,mEditTextQuery.getText().toString());
+                    editor.putString(QUERY_SEARCH, mEditTextQuery.getText().toString());
                     editor.putString(CHECKBOX_STRING, checkBoxVerification());
                     editor.putString(SWITCH_ACTIVATED, "true");
                     editor.apply();
                     // Call an AlertDialog and redirection to the MainActivity
                     alertDialogInterfaceOnClickSwitchButton();
                 }
-            }else{
+            } else {
                 editor.clear().apply();
             }
         });
     }
+
     // -----------------------
     // TREATMENT CLEAR BUTTON
     // -----------------------
-    private void clearButtonTreatment(){
-        mClearButton.setOnClickListener(view ->{
+    private void clearButtonTreatment() {
+        mClearButton.setOnClickListener(view -> {
             editor = getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE).edit();
             // Remove all data in SharedPreferences
             editor.clear().apply();
@@ -178,13 +190,14 @@ public class NotificationActivity extends AppCompatActivity{
             this.mCheckBoxTravel.setChecked(false);
         });
     }
+
     // -------------
     // ALERT DIALOG
     // -------------
-    private void alertDialogInterfaceOnClickSwitchButton(){
+    private void alertDialogInterfaceOnClickSwitchButton() {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Notification");
-        alertDialog.setMessage("Your search is taken into account."+ "\n" +"Notifications for news articles will appear daily at noon");
+        alertDialog.setMessage("Your search is taken into account." + "\n" + "Notifications for news articles will appear daily at noon");
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setButton(Dialog.BUTTON_POSITIVE, "OK", (dialog, which) -> {
             alertDialog.dismiss();
@@ -195,10 +208,11 @@ public class NotificationActivity extends AppCompatActivity{
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary)));
         alertDialog.show();
     }
+
     // --------------------
     // RECOVERING DATA USER
     // --------------------
-    private void restoreSharedPreferences(){
+    private void restoreSharedPreferences() {
 
         // Recover all data
         this.mSharedPreferences = getSharedPreferences(SHARED_PREF_NOTIF, MODE_PRIVATE);
@@ -208,11 +222,11 @@ public class NotificationActivity extends AppCompatActivity{
 
         // Set the data in UI
         this.mEditTextQuery.setText(query);
-        if(switchButton.equals("true")){
+        if (switchButton.equals("true")) {
             this.mSwitchButton.setChecked(true);
         }
         this.mEditTextQuery.setText(query);
-        if(!checkBoxVerif.equals("")){
+        if (!checkBoxVerif.equals("")) {
             this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxArts, CheckBoxTreatment.TAG_CHECKBOX_ART);
             this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxPolitics, CheckBoxTreatment.TAG_CHECKBOX_POLITICS);
             this.checkBoxTreatment.stringCheckBoxTreatment(checkBoxVerif, mCheckBoxBusiness, CheckBoxTreatment.TAG_CHECKBOX_BUSINESS);

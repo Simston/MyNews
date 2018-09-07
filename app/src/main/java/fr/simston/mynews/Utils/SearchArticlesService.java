@@ -16,12 +16,12 @@ import retrofit2.http.QueryMap;
  *
  * @version 1.0
  */
-public interface SearchArticlesService {
+interface SearchArticlesService {
 
     @GET("articlesearch.json")
     Observable<SearchArticles> getSearchArticles(@Query("q") String query, @QueryMap Map<String, String> options);
 
-    public static final Retrofit retrofit = new Retrofit.Builder()
+    Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://api.nytimes.com/svc/search/v2/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

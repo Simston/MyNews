@@ -59,22 +59,21 @@ public class ArticlesAdapter<T> extends RecyclerView.Adapter<ArticlesViewHolder>
         return articles.size();
     }
 
-    public void updateData(List<T> list){
+    public void updateData(List<T> list) {
         this.articles = list;
         notifyDataSetChanged();
     }
 
-    public String getUrlArticle(int position){
+    public String getUrlArticle(int position) {
         String urlArticle = null;
         T article = articles.get(position);
-        if(article instanceof TopStoriesArticles){
-            urlArticle = ((TopStoriesArticles)article).getUrl();
-        }
-        else if(article instanceof MostPopularArticles){
-            urlArticle = ((MostPopularArticles)article).getUrl();
-        }else if (article instanceof Docs){
-            urlArticle = ((Docs)article).getWebUrl();
-            Log.e("URL",urlArticle);
+        if (article instanceof TopStoriesArticles) {
+            urlArticle = ((TopStoriesArticles) article).getUrl();
+        } else if (article instanceof MostPopularArticles) {
+            urlArticle = ((MostPopularArticles) article).getUrl();
+        } else if (article instanceof Docs) {
+            urlArticle = ((Docs) article).getWebUrl();
+            Log.e("URL", urlArticle);
         }
         return urlArticle;
     }
