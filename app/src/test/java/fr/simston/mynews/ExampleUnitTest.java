@@ -24,8 +24,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 
-
-//@RunWith(AndroidJUnit4.class)
 public class ExampleUnitTest {
 
     /*  Override the default AndroidSchedulers.mainThread() Scheduler

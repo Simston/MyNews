@@ -33,6 +33,9 @@ public class ArticlesAdapter<T> extends RecyclerView.Adapter<ArticlesViewHolder>
 
     // CONSTRUCTOR
     public ArticlesAdapter(RequestManager glide, List<ArticleID> articleIDList) {
+        for (ArticleID element: articleIDList) {
+            Log.e("TAG", "adapter "+element.getUrlArticle());
+        }
         this.articleIDList = articleIDList;
         this.articles = new ArrayList<>();
         this.glide = glide;

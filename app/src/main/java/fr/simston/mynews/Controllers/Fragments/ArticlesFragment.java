@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -80,8 +81,19 @@ public class ArticlesFragment extends BaseFragment {
         this.beginDate = getArguments().getString("beginDate");
         this.endDate = getArguments().getString("endDate");
         this.checkBoxString = getArguments().getString("checkBoxString");
+    }
 
-        this.listArticleUrl = ArticleID.findWithQuery(ArticleID.class, "Select * from article_id");
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            this.listArticleUrl = ArticleID.listAll(ArticleID.class);
+        }catch (Exception e){
+            this.listArticleUrl = new ArrayList<>();
+        }
+        for (ArticleID element : listArticleUrl) {
+            Log.e("TAG", String.valueOf(element.getUrlArticle()));
+        }
 
         configureRecyclerView();
         configureOnClickRecyclerView();
@@ -207,10 +219,9 @@ public class ArticlesFragment extends BaseFragment {
     private void saveArticleUrlInDB(String url) {
         ArticleID articleID = new ArticleID(url);
         // Verif in DB if exist or not and save it.
-        List<ArticleID> urlArticle = ArticleID.findWithQuery(ArticleID.class, "Select * from article_id where url_article = ?", url);
-        if (urlArticle.isEmpty()) {
-            articleID.save();
+        //List<ArticleID> urlArticle = ArticleID.findById(ArticleID.class, url);
 
-        }
+        articleID.save();
+
     }
 }
