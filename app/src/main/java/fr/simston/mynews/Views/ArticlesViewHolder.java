@@ -45,12 +45,7 @@ public class ArticlesViewHolder<T> extends RecyclerView.ViewHolder {
     public ArticlesViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        // ???
-        /*if(this.mImageView == null){
-            Glide.with(this.itemView)
-                    .load(R.drawable.ny_logo)
-                    .into(mImageView);
-        }*/
+
     }
 
     public void updateWithArticle(T article, List<ArticleID> articleIDList) {
