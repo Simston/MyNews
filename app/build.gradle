@@ -21,9 +21,9 @@ android {
             testCoverageEnabled true
         }
     }
-    testOptions {
+    /*testOptions {
         unitTests.returnDefaultValues = true
-    }
+    }*/
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
