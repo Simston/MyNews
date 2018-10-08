@@ -35,7 +35,7 @@ public class ExampleInstrumentedTest {
     public void checkIfTabsVisible() {
         onView(withText("Top Stories")).check(matches(isCompletelyDisplayed()));
         onView(withText("Most Popular")).check(matches(isCompletelyDisplayed()));
-        //onView(withText("Arts")).check(matches(isCompletelyDisplayed()));
+        onView(withText("Arts")).check(matches(isCompletelyDisplayed()));
     }
 
     @Test
